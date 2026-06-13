@@ -3,8 +3,8 @@
 import { useModal } from "@/lib/ModalContext";
 import { HiCheck, HiStar, HiFire } from "react-icons/hi";
 
-const plans = [
-  {
+  const plans = [
+  { id: "standard",
     name: "Standard",
     price: "700",
     desc: "Pour comprendre ce qui bloque votre dossier et recevoir un rapport personnalisé complet.",
@@ -20,7 +20,7 @@ const plans = [
       "Garantie satisfait ou remboursé 30j",
     ],
   },
-  {
+  { id: "premium",
     name: "Premium",
     price: "900",
     desc: "Accompagnement complet jusqu'à l'attribution de votre logement.",
@@ -97,7 +97,7 @@ export default function PricingSection() {
               </ul>
 
               <button
-                onClick={() => openModal(`Formule ${plan.name}`)}
+                onClick={() => openModal(`Formule ${plan.name}`, plan.id)}
                 className={`w-full py-3 rounded-xl text-sm font-bold transition-all shadow-lg hover:shadow-xl active:scale-95 cursor-pointer text-white ${
                   plan.popular
                     ? "bg-gradient-to-r from-purple-600 to-pink-600"

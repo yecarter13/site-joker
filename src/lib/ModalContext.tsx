@@ -4,9 +4,10 @@ import { createContext, useContext, useState, useCallback, ReactNode } from "rea
 
 interface ModalContextType {
   isOpen: boolean;
-  openModal: (propertyInfo?: string) => void;
+  openModal: (propertyInfo?: string, preselectedPlan?: string) => void;
   closeModal: () => void;
   propertyInfo: string;
+  preselectedPlan: string;
 }
 
 const ModalContext = createContext<ModalContextType>({
@@ -14,24 +15,28 @@ const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
   propertyInfo: "",
+  preselectedPlan: "",
 });
 
 export function ModalProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [propertyInfo, setPropertyInfo] = useState("");
+  const [preselectedPlan, setPreselectedPlan] = useState("");
 
-  const openModal = useCallback((info?: string) => {
+  const openModal = useCallback((info?: string, plan?: string) => {
     setPropertyInfo(info || "");
+    setPreselectedPlan(plan || "");
     setIsOpen(true);
   }, []);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
     setPropertyInfo("");
+    setPreselectedPlan("");
   }, []);
 
   return (
-    <ModalContext.Provider value={{ isOpen, openModal, closeModal, propertyInfo }}>
+    <ModalContext.Provider value={{ isOpen, openModal, closeModal, propertyInfo, preselectedPlan }}>
       {children}
     </ModalContext.Provider>
   );
