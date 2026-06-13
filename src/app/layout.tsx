@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JokerImmo - Votre dossier, votre meilleure chance de louer",
+  title: "Logement HLM - Votre dossier, votre meilleure chance de louer",
   description: "Optimisez votre dossier de location et trouvez le logement idéal. Accompagnement personnalisé pour maximiser vos chances d'être accepté.",
   icons: { icon: "/logo.png" },
 };

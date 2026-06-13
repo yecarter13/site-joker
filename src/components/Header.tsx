@@ -16,12 +16,12 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/logo.png"
-            alt="JokerImmo"
+            alt="Logement HLM"
             width={36}
             height={36}
             className="w-9 h-9 object-contain"
           />
-          <span className="font-bold text-xl text-white">Joker<span className="text-blue-400">Immo</span></span>
+          <span className="font-bold text-xl text-white">Logement <span className="text-blue-400">HLM</span></span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
