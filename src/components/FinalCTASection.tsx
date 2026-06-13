@@ -1,7 +1,6 @@
 "use client";
 
 import { getWhatsAppLink } from "@/lib/utils";
-import { FaWhatsapp } from "react-icons/fa";
 import { HiCheck } from "react-icons/hi";
 
 export default function FinalCTASection() {
@@ -21,7 +20,6 @@ export default function FinalCTASection() {
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-3 bg-indigo-500 hover:bg-indigo-400 text-white px-8 py-4 rounded-full text-lg font-bold transition-all shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105"
         >
-          <FaWhatsapp className="text-2xl" />
           Analyser mon dossier →
         </a>
 

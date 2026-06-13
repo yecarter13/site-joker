@@ -96,7 +96,7 @@ function AdminDashboard() {
           </div>
         ) : properties.length === 0 ? (
           <div className="text-center py-16 md:py-20 bg-white rounded-2xl border border-gray-200">
-            <div className="text-6xl mb-4">🏠</div>
+            <div className="text-4xl mb-4 text-gray-300">[ ]</div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucun logement</h3>
             <p className="text-gray-500 mb-6">Commencez par ajouter votre premier logement</p>
             <Link

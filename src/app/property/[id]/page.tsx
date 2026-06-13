@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MapComponent from "@/components/MapComponent";
 import { formatPrice, formatSurface, getWhatsAppLink } from "@/lib/utils";
-import { FaWhatsapp, FaMapMarkerAlt, FaArrowLeft } from "react-icons/fa";
+import { FaMapMarkerAlt, FaArrowLeft } from "react-icons/fa";
 import { HiHome, HiViewGrid, HiLightningBolt, HiOfficeBuilding, HiCalendar, HiCurrencyDollar, HiTag, HiCheck, HiX as HiXIcon } from "react-icons/hi";
 import { GiElevator, GiCarDoor, GiFlowers, GiSunflower } from "react-icons/gi";
 
@@ -78,7 +78,7 @@ export default function PropertyDetailPage() {
         <Header />
         <div className="flex-1 flex items-center justify-center py-20 px-4">
           <div className="text-center">
-            <div className="text-6xl mb-4">🔍</div>
+            <div className="text-4xl mb-4 text-gray-300">[ ]</div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Logement non trouvé</h2>
             <Link href="/catalog" className="text-indigo-600 font-semibold hover:underline">
               Voir tous les logements
@@ -245,7 +245,6 @@ export default function PropertyDetailPage() {
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white w-full py-3.5 md:py-4 rounded-xl text-base md:text-lg font-bold transition-all shadow-xl shadow-green-500/30 active:scale-[0.98]"
             >
-              <FaWhatsapp className="text-xl md:text-2xl" />
               Postuler pour ce bien via WhatsApp
             </a>
           </div>

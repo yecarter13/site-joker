@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { formatPrice, formatSurface, getWhatsAppLink } from "@/lib/utils";
-import { FaWhatsapp, FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { HiHome, HiViewGrid, HiBadgeCheck } from "react-icons/hi";
 
 interface PropertyCardProps {
@@ -106,10 +106,9 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             href={getWhatsAppLink(msg)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg active:scale-95"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg active:scale-95"
           >
-            <FaWhatsapp className="text-lg" />
-            <span className="hidden sm:inline">Je veux ce logement</span>
+            Je veux ce logement
           </a>
         </div>
       </div>

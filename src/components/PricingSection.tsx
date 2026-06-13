@@ -1,7 +1,7 @@
 "use client";
 
 import { getWhatsAppLink } from "@/lib/utils";
-import { FaWhatsapp, FaCheck } from "react-icons/fa";
+import { HiCheck } from "react-icons/hi";
 import { HiStar, HiLightningBolt, HiFire } from "react-icons/hi";
 
 const plans = [
@@ -87,12 +87,12 @@ export default function PricingSection() {
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                  ⭐ Le plus choisi
+                  Le plus choisi
                 </div>
               )}
               {plan.urgent && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-                  🚨 Urgence — relogement rapide
+                  Urgence — relogement rapide
                 </div>
               )}
 
@@ -115,7 +115,7 @@ export default function PricingSection() {
               <ul className="space-y-3 mb-6 flex-1">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
-                    <FaCheck className={`mt-0.5 flex-shrink-0 ${
+                    <HiCheck className={`mt-0.5 flex-shrink-0 ${
                       plan.color === "indigo" ? "text-indigo-500" :
                       plan.color === "amber" ? "text-amber-500" :
                       "text-purple-500"
@@ -137,7 +137,6 @@ export default function PricingSection() {
                     : "bg-indigo-600 text-white hover:bg-indigo-700"
                 }`}
               >
-                <FaWhatsapp />
                 {plan.urgent ? "Je veux être relogé rapidement →" : plan.popular ? "Je veux ce suivi →" : "Commencer l'analyse →"}
               </a>
             </div>
@@ -145,13 +144,13 @@ export default function PricingSection() {
         </div>
 
         <div className="mt-10 text-center text-xs text-gray-400 flex flex-wrap items-center justify-center gap-4">
-          <span>💳 Paiement sécurisé</span>
+          <span>Paiement sécurisé</span>
           <span>·</span>
-          <span>🔒 Données protégées</span>
+          <span>Données protégées</span>
           <span>·</span>
           <span>Aucun paiement avant validation</span>
           <span>·</span>
-          <span>✅ Remboursé sous 30j</span>
+          <span>Remboursé sous 30j</span>
         </div>
       </div>
     </section>

@@ -52,7 +52,7 @@ export default function MethodSection() {
               <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
               <p className="text-sm text-gray-600 mb-4">{step.desc}</p>
               <div className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
-                ⏱ {step.time}
+                {step.time}
               </div>
             </div>
           ))}
@@ -60,10 +60,9 @@ export default function MethodSection() {
 
         <div className="mt-10 text-center">
           <div className="inline-flex items-center gap-2 bg-indigo-50 rounded-full px-5 py-2 text-sm font-semibold text-indigo-700">
-            <span className="text-lg">📈</span>
             +72% d&apos;amélioration estimée du score bailleur
           </div>
-          <p className="text-xs text-gray-400 mt-2">⚡ Livré sous 24h</p>
+          <p className="text-xs text-gray-400 mt-2">Livré sous 24h</p>
         </div>
       </div>
     </section>

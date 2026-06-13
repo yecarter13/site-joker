@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
+import { FaInstagram, FaFacebook } from "react-icons/fa";
 import { HiDocumentText } from "react-icons/hi";
 import { getWhatsAppLink } from "@/lib/utils";
 
@@ -36,7 +36,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 hover:text-green-400 transition-colors"
               >
-                <FaWhatsapp /> WhatsApp
+                WhatsApp
               </a>
               <a href="#" className="flex items-center gap-2 hover:text-pink-400 transition-colors">
                 <FaInstagram /> Instagram
