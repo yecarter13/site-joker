@@ -245,7 +245,7 @@ export default function PropertyDetailPage() {
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white w-full py-3.5 md:py-4 rounded-xl text-base md:text-lg font-bold transition-all shadow-xl shadow-green-500/30 active:scale-[0.98]"
             >
-              Postuler pour ce bien via WhatsApp
+              Postuler pour ce bien
             </a>
           </div>
 

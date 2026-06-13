@@ -10,12 +10,17 @@ export async function POST(request: Request) {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  const uploadDir = path.join(process.cwd(), "public", "images");
+  // Use /tmp on Vercel (writable), public/images locally
+  const uploadDir =
+    process.env.VERCEL === "1"
+      ? "/tmp/images"
+      : path.join(process.cwd(), "public", "images");
+
   await mkdir(uploadDir, { recursive: true });
 
   const uniqueName = `${Date.now()}-${file.name}`;
   const filePath = path.join(uploadDir, uniqueName);
   await writeFile(filePath, buffer);
 
-  return NextResponse.json({ url: `/images/${uniqueName}` });
+  return NextResponse.json({ url: `/api/images/${uniqueName}` });
 }

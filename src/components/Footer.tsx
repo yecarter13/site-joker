@@ -56,7 +56,7 @@ export default function Footer() {
                 <span className="w-8 h-8 bg-green-500/10 rounded-lg flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
                   <FaWhatsapp className="text-green-400" />
                 </span>
-                WhatsApp
+                Nous contacter
               </a>
               <a href="#" className="flex items-center gap-2 hover:text-pink-400 transition-colors group">
                 <span className="w-8 h-8 bg-pink-500/10 rounded-lg flex items-center justify-center group-hover:bg-pink-500/20 transition-colors">

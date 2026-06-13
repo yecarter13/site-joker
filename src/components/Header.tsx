@@ -28,7 +28,7 @@ export default function Header() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all shadow-lg shadow-blue-200"
           >
-            Discuter sur WhatsApp
+            Nous contacter
           </a>
         </nav>
 
@@ -49,7 +49,7 @@ export default function Header() {
             className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-3 rounded-full text-sm font-semibold"
             onClick={() => setOpen(false)}
           >
-            Discuter sur WhatsApp
+            Nous contacter
           </a>
         </div>
       )}

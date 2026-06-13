@@ -91,6 +91,8 @@ export default function PricingSection() {
               className={`relative bg-white rounded-3xl p-6 border-2 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 flex flex-col ${
                 plan.popular
                   ? "border-amber-400 shadow-xl shadow-amber-100 scale-105 md:scale-110 z-10"
+                  : plan.urgent
+                  ? "border-gray-100 hover:border-indigo-200 mt-8 md:mt-0"
                   : "border-gray-100 hover:border-indigo-200"
               }`}
             >
@@ -98,12 +100,12 @@ export default function PricingSection() {
               <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${plan.gradient} opacity-5 rounded-bl-full`} />
 
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-5 py-1.5 rounded-full text-xs font-bold shadow-lg whitespace-nowrap flex items-center gap-1">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-5 py-1.5 rounded-full text-xs font-bold shadow-lg whitespace-nowrap flex items-center gap-1 z-20">
                   <span>⭐</span> Le plus choisi
                 </div>
               )}
               {plan.urgent && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-1.5 rounded-full text-xs font-bold shadow-lg whitespace-nowrap flex items-center gap-1">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-1.5 rounded-full text-xs font-bold shadow-lg whitespace-nowrap flex items-center gap-1 z-20">
                   <span>🚨</span> Urgence — relogement rapide
                 </div>
               )}

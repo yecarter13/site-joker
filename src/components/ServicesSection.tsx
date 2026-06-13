@@ -1,6 +1,7 @@
 "use client";
 
 import { HiHome, HiOfficeBuilding, HiDocumentText, HiUserGroup, HiLocationMarker } from "react-icons/hi";
+import HexagonImage from "./HexagonImage";
 
 const services = [
   { icon: HiOfficeBuilding, label: "HLM / Logement social", desc: "Accompagnement pour les logements sociaux et HLM" },
@@ -55,13 +56,14 @@ export default function ServicesSection() {
             <div className="absolute top-1/2 -left-4 w-16 h-16 border-2 border-indigo-200 rounded-xl rotate-45 animate-float" />
 
             {/* Main image */}
-            <div className="relative clip-rounded-hex overflow-hidden shadow-2xl">
-              <img
+            <div className="relative shadow-2xl">
+              <div className="absolute -top-6 -right-6 w-full h-full bg-gradient-to-br from-indigo-200/50 to-purple-200/50 clip-hex-elongated" />
+              <HexagonImage
                 src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=800&q=80"
                 alt="Accompagnement personnalisé"
-                className="w-full h-[400px] md:h-[500px] object-cover"
+                className="w-full h-[400px] md:h-[500px]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 to-transparent pointer-events-none clip-hex-elongated" />
             </div>
 
             {/* Floating badge */}
