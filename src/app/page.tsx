@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import MethodSection from "@/components/MethodSection";
+import AttributionSection from "@/components/AttributionSection";
 import AvailableListings from "@/components/AvailableListings";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CommitmentsSection from "@/components/CommitmentsSection";
@@ -20,6 +21,7 @@ export default function Home() {
         <ServicesSection />
         <WaveDivider color="#f9fafb" />
         <MethodSection />
+        <AttributionSection />
         <WaveDivider />
         <AvailableListings />
         <WaveDivider color="#f9fafb" />

@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "JokerImmo - Votre dossier, votre meilleure chance de louer",
   description: "Optimisez votre dossier de location et trouvez le logement idéal. Accompagnement personnalisé pour maximiser vos chances d'être accepté.",
-  icons: { icon: "/favicon.ico" },
+  icons: { icon: "/logo.png" },
 };
 
 export default function RootLayout({

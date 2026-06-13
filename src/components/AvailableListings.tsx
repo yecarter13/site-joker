@@ -55,7 +55,7 @@ export default function AvailableListings() {
               Sélection
             </div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-              Nos logements <span className="gradient-text">disponibles</span>
+               logements <span className="gradient-text">disponibles</span>
             </h2>
             <p className="text-gray-500 mt-1 text-sm">{properties.length} logement{properties.length > 1 ? "s" : ""} à louer</p>
           </div>
