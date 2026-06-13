@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ModalProvider } from "@/lib/ModalContext";
+import ContactModal from "@/components/ContactModal";
+import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Logement Dossier - Votre dossier, votre meilleure chance de louer",
-  description: "Nous analysons, structurons et optimisons votre candidature logement pour maximiser vos chances face aux bailleurs. HLM ou location privée, partout en France.",
+  title: "JokerImmo - Votre dossier, votre meilleure chance de louer",
+  description: "Optimisez votre dossier de location et trouvez le logement idéal. Accompagnement personnalisé pour maximiser vos chances d'être accepté.",
   icons: { icon: "/favicon.ico" },
 };
 
@@ -26,7 +29,11 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="font-sans antialiased bg-white text-gray-900 min-h-screen flex flex-col">
-        {children}
+        <ModalProvider>
+          {children}
+          <ContactModal />
+          <FloatingWhatsAppButton />
+        </ModalProvider>
       </body>
     </html>
   );

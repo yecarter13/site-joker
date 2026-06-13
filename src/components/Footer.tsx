@@ -1,12 +1,15 @@
+"use client";
+
 import Link from "next/link";
-import { FaWhatsapp, FaInstagram, FaFacebook, FaArrowRight } from "react-icons/fa";
+import { FaInstagram, FaFacebook, FaArrowRight } from "react-icons/fa";
 import { HiDocumentText } from "react-icons/hi";
-import { getWhatsAppLink } from "@/lib/utils";
+import { useModal } from "@/lib/ModalContext";
 
 export default function Footer() {
+  const { openModal } = useModal();
+
   return (
     <footer className="relative bg-gray-900 text-gray-300 overflow-hidden">
-      {/* Background pattern */}
       <div className="absolute inset-0 bg-grid opacity-[0.03]" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-3xl" />
 
@@ -47,17 +50,12 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">Contact</h3>
             <div className="space-y-2.5 text-sm">
-              <a
-                href={getWhatsAppLink("Bonjour, j'ai une question.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-green-400 transition-colors group"
-              >
+              <button onClick={() => openModal()} className="flex items-center gap-2 hover:text-green-400 transition-colors group cursor-pointer w-full text-left">
                 <span className="w-8 h-8 bg-green-500/10 rounded-lg flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
-                  <FaWhatsapp className="text-green-400" />
+                  <span className="w-4 h-4 bg-green-400 rounded-full" />
                 </span>
                 Nous contacter
-              </a>
+              </button>
               <a href="#" className="flex items-center gap-2 hover:text-pink-400 transition-colors group">
                 <span className="w-8 h-8 bg-pink-500/10 rounded-lg flex items-center justify-center group-hover:bg-pink-500/20 transition-colors">
                   <FaInstagram className="text-pink-400" />

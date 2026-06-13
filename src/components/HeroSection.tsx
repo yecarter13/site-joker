@@ -1,10 +1,12 @@
 "use client";
 
-import { getWhatsAppLink } from "@/lib/utils";
+import { useModal } from "@/lib/ModalContext";
 import { FaArrowRight } from "react-icons/fa";
 import { HiDocumentText, HiCheck } from "react-icons/hi";
 
 export default function HeroSection() {
+  const { openModal } = useModal();
+
   return (
     <section className="relative bg-gradient-to-br from-indigo-950 via-indigo-900 to-indigo-950 text-white overflow-hidden">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200')] bg-cover bg-center opacity-5" />
@@ -29,15 +31,13 @@ export default function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 mb-6">
-              <a
-                href={getWhatsAppLink("Bonjour, je souhaite faire analyser mon dossier de location.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white px-6 py-3.5 rounded-full text-base font-bold transition-all shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 active:scale-[0.97]"
+              <button
+                onClick={() => openModal()}
+                className="group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white px-6 py-3.5 rounded-full text-base font-bold transition-all shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 active:scale-[0.97] cursor-pointer"
               >
                 Suivre mon dossier
                 <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
-              </a>
+              </button>
               <a
                 href="/#method"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/20 px-6 py-3.5 rounded-full text-base font-semibold transition-all"
@@ -76,14 +76,12 @@ export default function HeroSection() {
       </div>
 
       <div className="sticky bottom-0 z-40 bg-gradient-to-r from-indigo-700 to-purple-700 md:hidden">
-        <a
-          href={getWhatsAppLink("Bonjour, je souhaite faire analyser mon dossier de location.")}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 text-white py-3.5 px-4 text-sm font-bold"
+        <button
+          onClick={() => openModal()}
+          className="w-full text-white py-3.5 px-4 text-sm font-bold cursor-pointer"
         >
           Suivre mon dossier
-        </a>
+        </button>
       </div>
     </section>
   );

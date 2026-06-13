@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { formatPrice, formatSurface, getWhatsAppLink } from "@/lib/utils";
+import { formatPrice, formatSurface } from "@/lib/utils";
+import { useModal } from "@/lib/ModalContext";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { HiHome, HiViewGrid, HiBadgeCheck } from "react-icons/hi";
 
@@ -30,7 +31,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     ? property.images[0]
     : "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80";
 
-  const msg = `Bonjour, je suis intéressé par le logement ${property.title} - Réf: ${property.reference}. Comment faire pour mon dossier ?`;
+  const { openModal } = useModal();
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-100 group">
@@ -102,14 +103,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             <span className="text-xs text-gray-400">Loyer CC</span>
             <div className="font-bold text-xl text-indigo-600">{formatPrice(property.price)}</div>
           </div>
-          <a
-            href={getWhatsAppLink(msg)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg active:scale-95"
+          <button
+            onClick={() => openModal(`${property.title} - Réf: ${property.reference}`)}
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
           >
             Je veux ce logement
-          </a>
+          </button>
         </div>
       </div>
     </div>

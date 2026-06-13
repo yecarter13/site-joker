@@ -1,10 +1,12 @@
 "use client";
 
-import { getWhatsAppLink } from "@/lib/utils";
+import { useModal } from "@/lib/ModalContext";
 import { FaArrowRight } from "react-icons/fa";
 import { HiCheck } from "react-icons/hi";
 
 export default function FinalCTASection() {
+  const { openModal } = useModal();
+
   return (
     <section className="relative py-16 md:py-24 bg-gradient-to-br from-indigo-950 via-indigo-900 to-indigo-950 text-white overflow-hidden">
       <div className="relative max-w-3xl mx-auto px-4 text-center">
@@ -15,15 +17,13 @@ export default function FinalCTASection() {
           Rejoignez les centaines de personnes qui ont boosté leurs chances avec Logement Dossier. C&apos;est gratuit pour commencer.
         </p>
 
-        <a
-          href={getWhatsAppLink("Bonjour, je souhaite faire analyser mon dossier de location.")}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white px-10 py-4 rounded-full text-lg font-bold transition-all shadow-2xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105"
+        <button
+          onClick={() => openModal()}
+          className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white px-10 py-4 rounded-full text-lg font-bold transition-all shadow-2xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 cursor-pointer"
         >
           Suivre mon dossier
           <FaArrowRight className="text-sm group-hover:translate-x-1 transition-transform" />
-        </a>
+        </button>
 
         <div className="flex flex-wrap items-center justify-center gap-6 mt-10 text-sm text-indigo-200/80">
           <span className="flex items-center gap-1.5"><HiCheck className="text-green-400" /> Réponse sous 24h</span>

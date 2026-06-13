@@ -1,8 +1,7 @@
 "use client";
 
-import { getWhatsAppLink } from "@/lib/utils";
-import { FaWhatsapp, FaCheck } from "react-icons/fa";
-import { HiStar, HiLightningBolt, HiFire } from "react-icons/hi";
+import { useModal } from "@/lib/ModalContext";
+import { HiCheck, HiStar, HiLightningBolt, HiFire } from "react-icons/hi";
 
 const plans = [
   {
@@ -62,6 +61,7 @@ const plans = [
 ];
 
 export default function PricingSection() {
+  const { openModal } = useModal();
   return (
     <section id="tarifs" className="relative py-20 md:py-28 bg-white overflow-hidden">
       {/* Background decor */}
@@ -125,17 +125,15 @@ export default function PricingSection() {
               <ul className="space-y-3 mb-6 flex-1">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
-                    <FaCheck className={`mt-0.5 flex-shrink-0 bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`} />
+                    <HiCheck className={`mt-0.5 flex-shrink-0 bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`} />
                     <span>{f}</span>
                   </li>
                 ))}
               </ul>
 
-              <a
-                href={getWhatsAppLink(`Bonjour, je suis intéressé par la formule ${plan.name}.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-sm font-bold transition-all shadow-lg hover:shadow-xl active:scale-95 ${
+              <button
+                onClick={() => openModal(`Formule ${plan.name}`)}
+                className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-sm font-bold transition-all shadow-lg hover:shadow-xl active:scale-95 cursor-pointer ${
                   plan.popular
                     ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white"
                     : plan.urgent
@@ -143,21 +141,20 @@ export default function PricingSection() {
                     : `bg-gradient-to-r ${plan.gradient} text-white`
                 }`}
               >
-                <FaWhatsapp />
                 {plan.urgent ? "Je veux être relogé rapidement" : plan.popular ? "Je veux ce suivi" : "Commencer l'analyse"}
-              </a>
+              </button>
             </div>
           ))}
         </div>
 
         <div className="mt-12 text-center text-xs text-gray-400 flex flex-wrap items-center justify-center gap-4 bg-gray-50 rounded-2xl py-4 px-6 max-w-2xl mx-auto">
-          <span>💳 Paiement sécurisé</span>
+          <span>Paiement sécurisé</span>
           <span className="hidden sm:inline">&middot;</span>
-          <span>🔒 Données protégées</span>
+          <span>Données protégées</span>
           <span className="hidden sm:inline">&middot;</span>
           <span>Aucun paiement avant validation</span>
           <span className="hidden sm:inline">&middot;</span>
-          <span>✅ Remboursé sous 30j</span>
+          <span>Remboursé sous 30j</span>
         </div>
       </div>
     </section>

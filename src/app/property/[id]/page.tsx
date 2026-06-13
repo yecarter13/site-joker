@@ -6,7 +6,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MapComponent from "@/components/MapComponent";
-import { formatPrice, formatSurface, getWhatsAppLink } from "@/lib/utils";
+import { formatPrice, formatSurface } from "@/lib/utils";
+import { useModal } from "@/lib/ModalContext";
 import { FaMapMarkerAlt, FaArrowLeft } from "react-icons/fa";
 import { HiHome, HiViewGrid, HiLightningBolt, HiOfficeBuilding, HiCalendar, HiCurrencyDollar, HiTag, HiCheck, HiX as HiXIcon } from "react-icons/hi";
 import { GiElevator, GiCarDoor, GiFlowers, GiSunflower } from "react-icons/gi";
@@ -47,6 +48,7 @@ interface Property {
 export default function PropertyDetailPage() {
   const params = useParams();
   const [property, setProperty] = useState<Property | null>(null);
+  const { openModal } = useModal();
   const [loading, setLoading] = useState(true);
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -239,14 +241,12 @@ export default function PropertyDetailPage() {
 
             <div className="text-xs text-gray-400 mb-4">Référence : {property.reference}</div>
 
-            <a
-              href={getWhatsAppLink(whatsappMsg)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white w-full py-3.5 md:py-4 rounded-xl text-base md:text-lg font-bold transition-all shadow-xl shadow-green-500/30 active:scale-[0.98]"
+            <button
+              onClick={() => openModal(`${property.title} - Réf: ${property.reference}`)}
+              className="flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white w-full py-3.5 md:py-4 rounded-xl text-base md:text-lg font-bold transition-all shadow-xl active:scale-[0.98] cursor-pointer"
             >
               Postuler pour ce bien
-            </a>
+            </button>
           </div>
 
           {/* Map */}
