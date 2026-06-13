@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Property {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  surface     Float
+  rooms       Int
+  bedrooms    Int?
+  bathrooms   Int?
+  floor       Int?
+  furnished   Boolean?
+  heating     String?
+  elevator    Boolean?
+  parking     Boolean?
+  balcony     Boolean?
+  terrace     Boolean?
+  city        String
+  district    String?
+  address     String?
+  type        String   @default("Privé")
+  dpe         String?
+  status      String   @default("Disponible")
+  images      String   @default("[]")
+  mapLink     String?
+  latitude    Float?
+  longitude   Float?
+  reference   String   @unique
+  availabilityDate String?
+  fees        Float?
+  deposit     Float?
+  yearBuilt   Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Admin {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+}
