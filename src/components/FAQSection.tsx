@@ -34,11 +34,18 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-16 md:py-24 bg-gray-50">
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="text-center mb-12">
+    <section id="faq" className="relative py-20 md:py-28 bg-gray-50 overflow-hidden">
+      {/* Background decor */}
+      <div className="absolute top-20 right-0 w-72 h-72 bg-indigo-50 rounded-full blur-3xl" />
+
+      <div className="relative max-w-3xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-indigo-100 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-600 mb-4">
+            <span className="w-2 h-2 bg-indigo-500 rounded-full" />
+            FAQ
+          </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-            Questions fréquentes
+            Questions <span className="gradient-text">fréquentes</span>
           </h2>
           <p className="text-lg text-gray-600">
             Tout ce que vous voulez savoir
@@ -49,21 +56,23 @@ export default function FAQSection() {
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="border border-gray-200 rounded-xl overflow-hidden transition-all bg-white"
+              className={`bg-white rounded-2xl overflow-hidden transition-all duration-300 border ${
+                openIndex === i ? "border-indigo-200 shadow-lg shadow-indigo-50" : "border-gray-200 hover:border-gray-300"
+              }`}
             >
               <button
-                className="w-full flex items-center justify-between p-4 text-left font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between p-4 md:p-5 text-left font-medium text-gray-900 hover:bg-gray-50 transition-colors"
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
               >
-                <span>{faq.q}</span>
+                <span className="pr-4 text-sm md:text-base">{faq.q}</span>
                 <HiChevronDown
-                  className={`text-gray-400 transition-transform text-lg flex-shrink-0 ${
-                    openIndex === i ? "rotate-180" : ""
+                  className={`text-gray-400 transition-transform duration-300 text-lg flex-shrink-0 ${
+                    openIndex === i ? "rotate-180 text-indigo-500" : ""
                   }`}
                 />
               </button>
               {openIndex === i && (
-                <div className="px-4 pb-4 text-sm text-gray-600 leading-relaxed">
+                <div className="px-4 md:px-5 pb-4 md:pb-5 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-3">
                   {faq.a}
                 </div>
               )}

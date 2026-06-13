@@ -1,43 +1,49 @@
 "use client";
 
-import { HiCheckCircle, HiStar } from "react-icons/hi";
+import { HiCheckCircle } from "react-icons/hi";
 
 const testimonials = [
   {
     name: "Marie T.",
     role: "CDI — Lyon · T2 trouvé en 3 semaines",
     badge: "Standard",
-    text: "Mon dossier était refusé partout depuis presque 8 mois. J'avais perdu espoir. Après l'analyse de Logement Dossier, j'ai compris exactement ce qui ne fonctionnait pas dans ma candidature. J'ai suivi les conseils à la lettre et en moins de 3 semaines, j'avais signé un bail pour un T2 à Lyon. Je recommande à 1000% !",
+    text: "Mon dossier était refusé partout depuis presque 8 mois. J'avais perdu espoir. Après l'analyse de Logement Dossier, j'ai compris exactement ce qui ne fonctionnait pas. J'ai suivi les conseils à la lettre et en moins de 3 semaines, j'avais signé un bail pour un T2 à Lyon.",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
   },
   {
     name: "Karim B.",
     role: "Auto-entrepreneur — Paris · T3",
     badge: "Prioritaire",
     text: "En tant qu'auto-entrepreneur, impossible de convaincre les propriétaires. Le rapport m'a appris à présenter mes revenus et à choisir les bons justificatifs. Accepté au 2e dossier !",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
   },
   {
     name: "Sophie L.",
     role: "Logement social — Marseille",
     badge: "Standard",
     text: "Je cherchais un HLM depuis 2 ans. L'équipe m'a expliqué comment reformuler ma demande et quels documents prioritaires joindre. Ma demande est remontée en priorité en quelques semaines.",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
   },
   {
     name: "Amina D.",
     role: "CDD — Bordeaux · T2",
     badge: "Prioritaire",
-    text: "Service vraiment sérieux. Un vrai regard humain sur notre situation. La conseillère a identifié des erreurs dans mon dossier que je n'aurais jamais trouvées seule. Excellent !",
+    text: "Service vraiment sérieux. Un vrai regard humain sur notre situation. La conseillère a identifié des erreurs dans mon dossier que je n'aurais jamais trouvées seule.",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80",
   },
   {
     name: "Lucie M.",
     role: "Situation complexe — Nantes · T3",
     badge: "Premium",
-    text: "Impeccable. Dossier très compliqué (divorce récent, revenus irréguliers). Le rapport a tout clairement expliqué. Trouvé un appartement en 5 semaines. Merci infiniment !",
+    text: "Impeccable. Dossier très compliqué (divorce récent, revenus irréguliers). Le rapport a tout clairement expliqué. Trouvé un appartement en 5 semaines.",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80",
   },
   {
     name: "Thomas R.",
     role: "Étudiant — Lille · Studio",
     badge: "Standard",
-    text: "Rapport de 8 pages ultra-détaillé avec points forts, faiblesses, liste de documents et stratégie par type de bailleur. Le prix est très raisonnable pour ce niveau de service. Top !",
+    text: "Rapport de 8 pages ultra-détaillé avec points forts, faiblesses, liste de documents et stratégie par type de bailleur. Le prix est très raisonnable pour ce niveau de service.",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80",
   },
 ];
 
@@ -49,11 +55,20 @@ const badgeColors: Record<string, string> = {
 
 export default function TestimonialsSection() {
   return (
-    <section className="py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+    <section className="relative py-20 md:py-28 bg-white overflow-hidden">
+      {/* Background decor */}
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-indigo-50/50 to-transparent" />
+      <div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-50 rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-indigo-50 rounded-full blur-3xl" />
+
+      <div className="relative max-w-7xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-indigo-50 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-600 mb-4">
+            <span className="w-2 h-2 bg-indigo-500 rounded-full" />
             Avis vérifiés
+          </div>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+            Ils ont trouvé <span className="gradient-text">leur logement</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Des centaines de familles et personnes seules accompagnées chaque année. Voici ce qu&apos;elles en disent.
@@ -61,17 +76,36 @@ export default function TestimonialsSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((t) => (
-            <div key={t.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-all">
-              <p className="text-sm text-gray-700 leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-gray-900">{t.name}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">{t.role}</div>
+          {testimonials.map((t, i) => (
+            <div
+              key={t.name}
+              className="group relative bg-white rounded-3xl p-6 border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
+            >
+              {/* Decorative gradient dot */}
+              <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${
+                i % 3 === 0 ? "from-indigo-100 to-purple-100" :
+                i % 3 === 1 ? "from-amber-100 to-orange-100" :
+                "from-purple-100 to-pink-100"
+              } rounded-bl-3xl -z-10`} />
+
+              {/* Quote mark */}
+              <div className="text-4xl leading-none text-indigo-200 mb-2">&ldquo;</div>
+
+              <p className="text-sm text-gray-700 leading-relaxed mb-5 line-clamp-4">
+                {t.text}
+              </p>
+
+              <div className="flex items-center gap-3 pt-4 border-t border-gray-50">
+                <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-indigo-100 flex-shrink-0">
+                  <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-gray-900 text-sm">{t.name}</div>
+                  <div className="text-xs text-gray-500 truncate">{t.role}</div>
+                </div>
+                <div className="flex items-center gap-1.5">
                   <HiCheckCircle className="text-green-500 text-sm" />
-                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${badgeColors[t.badge] || badgeColors.Standard}`}>
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${badgeColors[t.badge] || badgeColors.Standard}`}>
                     {t.badge}
                   </span>
                 </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { getWhatsAppLink } from "@/lib/utils";
-import { HiCheck } from "react-icons/hi";
+import { FaWhatsapp, FaCheck } from "react-icons/fa";
 import { HiStar, HiLightningBolt, HiFire } from "react-icons/hi";
 
 const plans = [
@@ -11,7 +11,7 @@ const plans = [
     cents: "99",
     desc: "Pour comprendre ce qui bloque votre dossier et recevoir un rapport personnalisé complet.",
     icon: HiStar,
-    color: "indigo",
+    gradient: "from-indigo-500 to-purple-500",
     features: [
       "Paiement unique — sans abonnement",
       "Analyse complète de votre profil locataire",
@@ -28,7 +28,7 @@ const plans = [
     cents: "90",
     desc: "Analyse express, suivi renforcé et accompagnement jusqu'à l'obtention de votre logement.",
     icon: HiLightningBolt,
-    color: "amber",
+    gradient: "from-amber-500 to-orange-500",
     popular: true,
     features: [
       "Paiement unique — sans abonnement",
@@ -45,9 +45,9 @@ const plans = [
     name: "Premium",
     price: "125",
     cents: "00",
-    desc: "Pour être relogé dans les 30 jours — expulsion, fin de bail, hébergement précaire, situation d'urgence.",
+    desc: "Pour être relogé dans les 30 jours — expulsion, fin de bail, hébergement précaire.",
     icon: HiFire,
-    color: "purple",
+    gradient: "from-purple-500 to-pink-500",
     urgent: true,
     features: [
       "Paiement unique — sans abonnement",
@@ -63,63 +63,67 @@ const plans = [
 
 export default function PricingSection() {
   return (
-    <section id="tarifs" className="py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+    <section id="tarifs" className="relative py-20 md:py-28 bg-white overflow-hidden">
+      {/* Background decor */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-b from-indigo-50/50 to-transparent rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-50 rounded-full blur-3xl" />
+      <div className="absolute top-40 right-0 w-64 h-64 bg-amber-50 rounded-full blur-3xl" />
+
+      <div className="relative max-w-7xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-indigo-50 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-600 mb-4">
+            <span className="w-2 h-2 bg-indigo-500 rounded-full" />
             Tarifs clairs
+          </div>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+            Choisissez votre <span className="gradient-text">accompagnement</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Choisissez votre accompagnement. Paiement unique · Aucun abonnement · Aucun frais caché.
+            Paiement unique &middot; Aucun abonnement &middot; Aucun frais caché.
             Vous ne payez qu&apos;après la validation de votre éligibilité.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative bg-white rounded-2xl p-6 border-2 transition-all hover:shadow-xl flex flex-col ${
+              className={`relative bg-white rounded-3xl p-6 border-2 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 flex flex-col ${
                 plan.popular
-                  ? "border-amber-400 shadow-lg shadow-amber-100 scale-105 md:scale-110"
+                  ? "border-amber-400 shadow-xl shadow-amber-100 scale-105 md:scale-110 z-10"
                   : "border-gray-100 hover:border-indigo-200"
               }`}
             >
+              {/* Decorative background shape */}
+              <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${plan.gradient} opacity-5 rounded-bl-full`} />
+
               {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                  Le plus choisi
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-5 py-1.5 rounded-full text-xs font-bold shadow-lg whitespace-nowrap flex items-center gap-1">
+                  <span>⭐</span> Le plus choisi
                 </div>
               )}
               {plan.urgent && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-                  Urgence — relogement rapide
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-1.5 rounded-full text-xs font-bold shadow-lg whitespace-nowrap flex items-center gap-1">
+                  <span>🚨</span> Urgence — relogement rapide
                 </div>
               )}
 
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
-                plan.color === "indigo" ? "bg-indigo-100 text-indigo-600" :
-                plan.color === "amber" ? "bg-amber-100 text-amber-600" :
-                "bg-purple-100 text-purple-600"
-              }`}>
-                <plan.icon className="text-2xl" />
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${plan.gradient} flex items-center justify-center mb-4 shadow-lg`}>
+                <plan.icon className="text-2xl text-white" />
               </div>
 
               <h3 className="text-xl font-bold text-gray-900 mb-1">{plan.name}</h3>
-              <p className="text-sm text-gray-500 mb-4">{plan.desc}</p>
+              <p className="text-sm text-gray-500 mb-4 min-h-[40px]">{plan.desc}</p>
 
               <div className="mb-6">
-                <span className="text-3xl font-extrabold text-gray-900">{plan.price}</span>
+                <span className="text-4xl font-extrabold text-gray-900">{plan.price}</span>
                 <span className="text-lg text-gray-500">,{plan.cents}€</span>
               </div>
 
               <ul className="space-y-3 mb-6 flex-1">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
-                    <HiCheck className={`mt-0.5 flex-shrink-0 ${
-                      plan.color === "indigo" ? "text-indigo-500" :
-                      plan.color === "amber" ? "text-amber-500" :
-                      "text-purple-500"
-                    }`} />
+                    <FaCheck className={`mt-0.5 flex-shrink-0 bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`} />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -129,28 +133,29 @@ export default function PricingSection() {
                 href={getWhatsAppLink(`Bonjour, je suis intéressé par la formule ${plan.name}.`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold transition-all ${
+                className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-sm font-bold transition-all shadow-lg hover:shadow-xl active:scale-95 ${
                   plan.popular
-                    ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:shadow-lg"
+                    ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white"
                     : plan.urgent
-                    ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:shadow-lg"
-                    : "bg-indigo-600 text-white hover:bg-indigo-700"
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                    : `bg-gradient-to-r ${plan.gradient} text-white`
                 }`}
               >
-                {plan.urgent ? "Je veux être relogé rapidement →" : plan.popular ? "Je veux ce suivi →" : "Commencer l'analyse →"}
+                <FaWhatsapp />
+                {plan.urgent ? "Je veux être relogé rapidement" : plan.popular ? "Je veux ce suivi" : "Commencer l'analyse"}
               </a>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 text-center text-xs text-gray-400 flex flex-wrap items-center justify-center gap-4">
-          <span>Paiement sécurisé</span>
-          <span>·</span>
-          <span>Données protégées</span>
-          <span>·</span>
+        <div className="mt-12 text-center text-xs text-gray-400 flex flex-wrap items-center justify-center gap-4 bg-gray-50 rounded-2xl py-4 px-6 max-w-2xl mx-auto">
+          <span>💳 Paiement sécurisé</span>
+          <span className="hidden sm:inline">&middot;</span>
+          <span>🔒 Données protégées</span>
+          <span className="hidden sm:inline">&middot;</span>
           <span>Aucun paiement avant validation</span>
-          <span>·</span>
-          <span>Remboursé sous 30j</span>
+          <span className="hidden sm:inline">&middot;</span>
+          <span>✅ Remboursé sous 30j</span>
         </div>
       </div>
     </section>
