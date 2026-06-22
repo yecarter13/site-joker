@@ -14,7 +14,7 @@ export default function FinalCTASection() {
           Votre logement vous attend
         </h2>
         <p className="text-lg text-indigo-100/80 mb-8 max-w-xl mx-auto">
-          Rejoignez les centaines de personnes qui ont boosté leurs chances avec Logement HLM. C&apos;est gratuit pour commencer.
+           Rejoignez les centaines de personnes qui ont boosté leurs chances avec Espace Habitat. C&apos;est gratuit pour commencer.
         </p>
 
         <button

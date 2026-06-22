@@ -78,7 +78,7 @@ export default function AdminLoginPage() {
         </form>
 
         <p className="text-center text-xs text-gray-400 mt-6">
-          &copy; {new Date().getFullYear()} Logement HLM Admin
+          &copy; {new Date().getFullYear()} Espace Habitat Admin
         </p>
       </div>
     </div>

@@ -12,7 +12,7 @@ export function whatsappLink(phone: string, message: string): string {
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
 }
 
-const WHATSAPP_NUMBER = "33758134795";
+import { WHATSAPP_NUMBER } from "./constants";
 
 export function getWhatsAppLink(message: string): string {
   return whatsappLink(WHATSAPP_NUMBER, message);

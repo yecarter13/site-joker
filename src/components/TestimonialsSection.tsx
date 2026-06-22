@@ -7,7 +7,7 @@ const testimonials = [
     name: "Marie T.",
     role: "CDI — Lyon · T2 trouvé en 3 semaines",
     badge: "Standard",
-    text: "Mon dossier était refusé partout depuis presque 8 mois. J'avais perdu espoir. Après l'analyse de Logement HLM, j'ai compris exactement ce qui ne fonctionnait pas. J'ai suivi les conseils à la lettre et en moins de 3 semaines, j'avais signé un bail pour un T2 à Lyon.",
+    text: "Mon dossier était refusé partout depuis presque 8 mois. J'avais perdu espoir. Après l'analyse de Espace Habitat, j'ai compris exactement ce qui ne fonctionnait pas. J'ai suivi les conseils à la lettre et en moins de 3 semaines, j'avais signé un bail pour un T2 à Lyon.",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
   },
   {
