@@ -9,7 +9,6 @@ export default function HeroSection() {
 
   return (
     <section className="relative bg-gradient-to-br from-indigo-950 via-indigo-900 to-indigo-950 text-white overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200')] bg-cover bg-center opacity-5" />
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/80 via-indigo-900/60 to-indigo-950/90" />
 
       <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
@@ -43,6 +42,12 @@ export default function HeroSection() {
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/20 px-6 py-3.5 rounded-full text-base font-semibold transition-all"
               >
                 Voir comment ça marche
+              </a>
+              <a
+                href="/catalog"
+                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-indigo-50 text-indigo-700 px-6 py-3.5 rounded-full text-base font-bold transition-all shadow-lg"
+              >
+                Voir les logements disponibles
               </a>
             </div>
 
