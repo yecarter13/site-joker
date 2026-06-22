@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import MapComponent from "@/components/MapComponent";
+import PropertyCard from "@/components/PropertyCard";
 import { formatPrice, formatSurface } from "@/lib/utils";
 import { useModal } from "@/lib/ModalContext";
 import { FaMapMarkerAlt, FaArrowLeft } from "react-icons/fa";
@@ -48,6 +48,7 @@ interface Property {
 export default function PropertyDetailPage() {
   const params = useParams();
   const [property, setProperty] = useState<Property | null>(null);
+  const [similar, setSimilar] = useState<Property[]>([]);
   const { openModal } = useModal();
   const [loading, setLoading] = useState(true);
   const [currentImage, setCurrentImage] = useState(0);
@@ -61,6 +62,17 @@ export default function PropertyDetailPage() {
       })
       .catch(() => setLoading(false));
   }, [params.id]);
+
+  useEffect(() => {
+    if (!property) return;
+    fetch(`/api/properties?status=Disponible`)
+      .then((r) => r.json())
+      .then((all: Property[]) => {
+        const same = all.filter((p) => p.id !== property.id && (p.city === property.city || p.type === property.type));
+        setSimilar(same.slice(0, 6));
+      })
+      .catch(() => {});
+  }, [property]);
 
   if (loading) {
     return (
@@ -249,37 +261,17 @@ export default function PropertyDetailPage() {
             </button>
           </div>
 
-          {/* Map */}
-          {(property.latitude && property.longitude) ? (
-            <div className="bg-white rounded-2xl p-4 md:p-6 mb-4 md:mb-6 border border-gray-100">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <FaMapMarkerAlt className="text-indigo-500" />
-                Localisation
-              </h3>
-              {locationStr && <p className="text-sm text-gray-500 mb-3">{locationStr}</p>}
-              <MapComponent
-                latitude={property.latitude}
-                longitude={property.longitude}
-                title={property.title}
-              />
+          {/* Annonces similaires */}
+          {similar.length > 0 && (
+            <div className="mt-4 md:mt-6">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Annonces similaires</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                {similar.map((p) => (
+                  <PropertyCard key={p.id} property={p} />
+                ))}
+              </div>
             </div>
-          ) : property.mapLink ? (
-            <div className="bg-white rounded-2xl p-4 md:p-6 mb-4 md:mb-6 border border-gray-100">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <FaMapMarkerAlt className="text-indigo-500" />
-                Localisation
-              </h3>
-              {locationStr && <p className="text-sm text-gray-500 mb-3">{locationStr}</p>}
-              <iframe
-                src={property.mapLink}
-                width="100%"
-                height="250"
-                className="rounded-xl"
-                allowFullScreen
-                loading="lazy"
-              />
-            </div>
-          ) : null}
+          )}
         </div>
       </main>
       <Footer />
