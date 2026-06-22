@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { formatPrice, formatSurface } from "@/lib/utils";
+import { useModal } from "@/lib/ModalContext";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { HiHome, HiViewGrid } from "react-icons/hi";
 
@@ -29,6 +30,8 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   const imageUrl = property.images && property.images.length > 0
     ? property.images[0]
     : "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80";
+
+  const { openModal } = useModal();
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-100 group">
@@ -100,7 +103,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             <span className="text-xs text-gray-400">Loyer CC</span>
             <div className="font-bold text-xl text-indigo-600">{formatPrice(property.price)}</div>
           </div>
-
+          <button
+            onClick={() => openModal(`${property.title} - Réf: ${property.reference}`)}
+            className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
+          >
+            Postuler pour ce bien
+          </button>
         </div>
       </div>
     </div>
