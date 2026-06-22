@@ -105,9 +105,9 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           </div>
           <button
             onClick={() => openModal(`${property.title} - Réf: ${property.reference}`)}
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
           >
-            Je veux ce logement
+            Réserver
           </button>
         </div>
       </div>
