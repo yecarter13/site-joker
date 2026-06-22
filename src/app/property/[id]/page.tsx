@@ -251,14 +251,7 @@ export default function PropertyDetailPage() {
               </div>
             )}
 
-            <div className="text-xs text-gray-400 mb-4">Référence : {property.reference}</div>
-
-            <button
-              onClick={() => openModal(`${property.title} - Réf: ${property.reference}`)}
-              className="flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white w-full py-3.5 md:py-4 rounded-xl text-base md:text-lg font-bold transition-all shadow-xl active:scale-[0.98] cursor-pointer"
-            >
-              Postuler pour ce bien
-            </button>
+            <div className="text-xs text-gray-400">Référence : {property.reference}</div>
           </div>
 
           {/* Annonces similaires */}
