@@ -12,6 +12,7 @@ import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
 import PartenairesSection from "@/components/PartenairesSection";
 import LouerSection from "@/components/LouerSection";
+import SiegeSection from "@/components/SiegeSection";
 import Footer from "@/components/Footer";
 import WaveDivider from "@/components/WaveDivider";
 
@@ -39,6 +40,7 @@ export default function Home() {
         <FinalCTASection />
         <PartenairesSection />
         <LouerSection />
+        <SiegeSection />
       </main>
       <Footer />
     </>
