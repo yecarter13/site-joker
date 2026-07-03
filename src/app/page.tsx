@@ -4,7 +4,6 @@ import CategoriesSection from "@/components/CategoriesSection";
 import ServicesSection from "@/components/ServicesSection";
 import MethodSection from "@/components/MethodSection";
 import AttributionSection from "@/components/AttributionSection";
-import AvailableListings from "@/components/AvailableListings";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CommitmentsSection from "@/components/CommitmentsSection";
 import PricingSection from "@/components/PricingSection";
@@ -27,9 +26,6 @@ export default function Home() {
         <WaveDivider color="#f9fafb" />
         <MethodSection />
         <AttributionSection />
-        <WaveDivider />
-        <AvailableListings />
-        <WaveDivider color="#f9fafb" />
         <TestimonialsSection />
         <WaveDivider />
         <CommitmentsSection />
