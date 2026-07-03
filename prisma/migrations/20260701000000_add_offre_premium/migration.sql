@@ -1,2 +1,0 @@
-ALTER TABLE "Property" ADD COLUMN "offreDuMoment" BOOLEAN NOT NULL DEFAULT false;
-ALTER TABLE "Property" ADD COLUMN "premium" BOOLEAN NOT NULL DEFAULT false;

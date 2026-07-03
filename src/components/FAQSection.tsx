@@ -5,6 +5,10 @@ import { HiChevronDown } from "react-icons/hi";
 
 const faqs = [
   {
+    q: "Puis-je payer après validation de mon éligibilité ?",
+    a: "Non. Le paiement est requis avant le début de l'accompagnement, dès validation de votre éligibilité. Un acompte sera demandé pour lancer l'étude de votre dossier.",
+  },
+  {
     q: "Comment fonctionne l'analyse de dossier ?",
     a: "Vous remplissez notre formulaire en ligne (5 min), un conseiller humain analyse votre profil et vous recevez un rapport personnalisé sous 24h avec vos points forts, faiblesses et les documents à fournir pour maximiser vos chances.",
   },
@@ -23,10 +27,6 @@ const faqs = [
   {
     q: "Mes données sont-elles protégées ?",
     a: "Absolument. Vos informations sont confidentielles, jamais revendues à des tiers et supprimées sur simple demande. Nous sommes conformes RGPD.",
-  },
-  {
-    q: "Puis-je payer après validation de mon éligibilité ?",
-    a: "Oui ! Vous ne payez qu'après la validation de votre éligibilité. Aucun paiement n'est demandé avant que nous ayons confirmé que nous pouvons vous aider.",
   },
 ];
 
