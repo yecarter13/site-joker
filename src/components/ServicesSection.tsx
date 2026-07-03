@@ -44,7 +44,7 @@ export default function ServicesSection() {
 
           <div className="relative">
             <img
-              src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=800&q=80"
+              src="/corps.webp"
               alt="Accompagnement personnalisé"
               className="w-full h-72 md:h-96 object-cover rounded-2xl shadow-lg"
             />
