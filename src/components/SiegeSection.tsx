@@ -5,11 +5,14 @@ import Image from "next/image";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 const images = [
+  "/siege.webp",
   "/siege1.webp",
   "/siege2.webp",
   "/siege3.webp",
   "/siege4.webp",
   "/siege5.webp",
+  "/siege6.webp",
+  "/siege7.webp",
 ];
 
 export default function SiegeSection() {

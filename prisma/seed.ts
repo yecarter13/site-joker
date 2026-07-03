@@ -3,306 +3,138 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-const sampleProperties = [
-  {
-    title: "Appartement Moderne F2 Paris 11e",
-    description: "Bel appartement lumineux de 2 pièces situé au cœur du 11e arrondissement. Proche de toutes les commodités : commerces, écoles et transports. Cuisine équipée, salle de bain moderne, grand salon avec vue dégagée. Idéal pour couple ou personne seule. Métro Voltaire à 2 min.",
-    price: 950,
-    surface: 45,
-    rooms: 2,
-    bedrooms: 1,
-    bathrooms: 1,
-    floor: 3,
-    furnished: true,
-    heating: "Individuel électrique",
-    elevator: true,
-    parking: false,
-    balcony: false,
-    terrace: false,
-    city: "Paris",
-    district: "11e arrondissement",
-    address: "45 Rue de la Roquette",
-    type: "Privé",
-    dpe: "C",
+const cities = [
+  { city: "Paris", districts: ["11e", "12e", "18e", "Montmartre", "Belleville", "Nation", "République", "Bastille"], lat: 48.8566, lng: 2.3522 },
+  { city: "Lyon", districts: ["Presqu'île", "Villeurbanne", "Caluire", "Bron", "Oullins", "Sainte-Foy"], lat: 45.7640, lng: 4.8357 },
+  { city: "Marseille", districts: ["Corniche", "Vieux-Port", "Cinq-Avenues", "Saint-Barnabé", "La Rose"], lat: 43.2965, lng: 5.3698 },
+  { city: "Toulouse", districts: ["Mirail", "Centre", "Saint-Cyprien", "Rangueil", "Empalot"], lat: 43.6047, lng: 1.4442 },
+  { city: "Bordeaux", districts: ["Chartrons", "Saint-Pierre", "Bastide", "Mériadeck", "Caudéran"], lat: 44.8378, lng: -0.5792 },
+  { city: "Lille", districts: ["Wazemmes", "Centre", "Vauban", "Moulins", "Fives"], lat: 50.6292, lng: 3.0573 },
+  { city: "Nice", districts: ["Promenade", "Cimiez", "Libération", "Riquier", "Gambetta"], lat: 43.7102, lng: 7.2620 },
+  { city: "Nantes", districts: ["Trentemoult", "Centre", "Île de Nantes", "Doulon", "Breil"], lat: 47.2184, lng: -1.5536 },
+  { city: "Montpellier", districts: ["Centre", "Antigone", "Près d'Arènes", "Port Marianne", "La Paillade"], lat: 43.6108, lng: 3.8767 },
+  { city: "Strasbourg", districts: ["Centre", "Orangerie", "Esplanade", "Ménau", "Neuhof"], lat: 48.5734, lng: 7.7521 },
+  { city: "Rennes", districts: ["Centre", "Villejean", "Beaulieu", "Cleunay", "Maurepas"], lat: 48.1173, lng: -1.6778 },
+  { city: "Grenoble", districts: ["Centre", "Saint-Martin", "Mistral", "Capuche", "Villeneuve"], lat: 45.1885, lng: 5.7245 },
+  { city: "Rouen", districts: ["Centre", "Mont-Saint-Aignan", "Sotteville", "Le Petit-Quevilly", "Bois-Guillaume"], lat: 49.4432, lng: 1.0993 },
+  { city: "Nancy", districts: ["Centre", "Saint-Max", "Vandoeuvre", "Laxou", "Mon Désert"], lat: 48.6921, lng: 6.1844 },
+  { city: "Metz", districts: ["Centre", "Queuleu", "Bellecroix", "Sablon", "Plantières"], lat: 49.1193, lng: 6.1757 },
+  { city: "Orléans", districts: ["Centre", "La Source", "Saint-Marceau", "Argonne", "Madeleine"], lat: 47.9029, lng: 1.9090 },
+  { city: "Toulon", districts: ["Centre", "Mourillon", "Pont du Las", "Sainte-Musse", "La Rode"], lat: 43.1242, lng: 5.9280 },
+  { city: "Le Havre", districts: ["Centre", "Sanvic", "Danton", "Graville", "Mont-Gaillard"], lat: 49.4938, lng: 0.1077 },
+  { city: "Dijon", districts: ["Centre", "Fontaine-d'Ouche", "Grésilles", "Maladière", "Chevreuil"], lat: 47.3220, lng: 5.0415 },
+  { city: "Angers", districts: ["Centre", "Belle-Beille", "Monplaisir", "Saint-Serge", "Deux Croix"], lat: 47.4784, lng: -0.5632 },
+];
+
+const dpeOptions = ["A", "B", "C", "D", "E", "F"];
+const heatings = ["Individuel électrique", "Individuel gaz", "Collectif", "Pompe à chaleur", "Solaire"];
+
+let refCounter = 0;
+
+function generateReference(): string {
+  refCounter++;
+  return `JKR-${refCounter.toString().padStart(4, "0")}`;
+}
+
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomBool(prob = 0.5): boolean {
+  return Math.random() < prob;
+}
+
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function generateProperty(
+  index: number,
+  flags: { offreDuMoment?: boolean; premium?: boolean }
+) {
+  const cityData = cities[index % cities.length];
+  const district = pick(cityData.districts);
+  const rooms = randomInt(1, 5);
+  const bedrooms = Math.max(0, rooms - 1);
+  const surface = randomInt(14, 140);
+  const price = rooms <= 1 ? randomInt(250, 550) : randomInt(400, 1500);
+  const isHLM = randomBool(0.2);
+
+  const titles = [
+    `${isHLM ? "HLM" : "Appartement"} ${["F1", "F2", "F3", "F4", "F5"][rooms - 1]} ${cityData.city}`,
+    `Studio meublé ${cityData.city}`,
+    `Bel appartement ${rooms} pièces ${cityData.city}`,
+    `T${rooms} lumineux ${district} - ${cityData.city}`,
+    `${isHLM ? "Logement HLM" : "Appartement"} ${surface}m² ${cityData.city}`,
+    `Duplex de standing ${cityData.city} - ${district}`,
+    `Charmant T${rooms} quartier ${district}`,
+    `Superbe appartement vue dégagée ${cityData.city}`,
+  ];
+
+  const descs = [
+    `Bel appartement situé dans le quartier ${district} à ${cityData.city}. Proche commerces, écoles et transports. Idéal pour couple ou famille.`,
+    `À louer dans le quartier ${district} : appartement lumineux et calme. Cuisine équipée, salle de bain moderne, nombreux rangements.`,
+    `Joli logement au cœur de ${cityData.city}, quartier ${district}. Commerces à proximité, métro à 5 min. Parfait pour jeunes actifs.`,
+    `Appartement en bon état situé dans une résidence calme à ${cityData.city}. Séjour spacieux, chambres lumineuses, cuisine séparée.`,
+    `Découvrez ce superbe bien situé à ${cityData.city} dans le quartier ${district}. Prestations de qualité, proche de toutes les commodités.`,
+  ];
+
+  const title = titles[index % titles.length];
+  const desc = descs[index % descs.length];
+
+  return {
+    title,
+    description: desc,
+    price,
+    surface,
+    rooms,
+    bedrooms,
+    bathrooms: randomInt(1, 2),
+    floor: randomInt(0, 10),
+    furnished: randomBool(0.6),
+    heating: pick(heatings),
+    elevator: randomBool(0.4),
+    parking: randomBool(0.3),
+    balcony: randomBool(0.3),
+    terrace: randomBool(0.2),
+    city: cityData.city,
+    district,
+    address: `${randomInt(1, 150)} Rue ${pick(["de la République", "Victor Hugo", "Jean Jaurès", "du Général de Gaulle", "des Fleurs", "de la Paix", "Lamarck", "Voltaire", "Pasteur", "Henri Barbusse"])}`,
+    type: isHLM ? "HLM" : "Privé",
+    dpe: pick(dpeOptions),
     status: "Disponible",
-    reference: "JKR-P4R1S1",
+    reference: generateReference(),
     images: JSON.stringify([
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80",
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80",
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80"
     ]),
-    latitude: 48.8566,
-    longitude: 2.3800,
-    availabilityDate: "2026-07-01",
-    fees: 120,
-    deposit: 950,
-    yearBuilt: 2018,
-    offreDuMoment: true,
-  },
-  {
-    title: "Studio Meublé Centre Lyon",
-    description: "Studio entièrement meublé avec goût dans le centre historique de Lyon. Résidence sécurisée, internet fibre, cuisine américaine. Parfait pour étudiant ou jeune professionnel. À 5 min de la gare Part-Dieu.",
-    price: 520,
-    surface: 22,
-    rooms: 1,
-    bedrooms: 1,
-    bathrooms: 1,
-    floor: 2,
-    furnished: true,
-    heating: "Collectif",
-    elevator: false,
-    parking: false,
-    balcony: false,
-    terrace: false,
-    city: "Lyon",
-    district: "Presqu'île",
-    address: "12 Rue de la République",
-    type: "Privé",
-    dpe: "A",
-    status: "Disponible",
-    reference: "JKR-LY0N1S",
-    images: JSON.stringify([
-      "https://images.unsplash.com/photo-1598928506311-c55ez637a11a?w=600&q=80"
-    ]),
-    latitude: 45.7640,
-    longitude: 4.8357,
-    availabilityDate: "2026-06-15",
-    fees: 65,
-    deposit: 520,
-    yearBuilt: 2015,
-  },
-  {
-    title: "T3 avec Terrasse Marseille",
-    description: "Joli T3 avec grande terrasse panoramique donnant sur la Méditerranée. Quartier calme et résidentiel. Cuisine moderne, climatisation, parking. Idéal pour famille. Proche plages et commerces.",
-    price: 890,
-    surface: 72,
-    rooms: 3,
-    bedrooms: 2,
-    bathrooms: 1,
-    floor: 5,
-    furnished: false,
-    heating: "Pompe à chaleur",
-    elevator: true,
-    parking: true,
-    balcony: false,
-    terrace: true,
-    city: "Marseille",
-    district: "Corniche",
-    address: "28 Promenade de la Corniche",
-    type: "Privé",
-    dpe: "D",
-    status: "Disponible",
-    reference: "JKR-MRS3L3",
-    images: JSON.stringify([
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80",
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80"
-    ]),
-    latitude: 43.2864,
-    longitude: 5.3703,
-    availabilityDate: "2026-07-01",
-    fees: 150,
-    deposit: 1780,
-    yearBuilt: 2010,
-    offreDuMoment: true,
-  },
-  {
-    title: "Appartement HLM F3 Toulouse",
-    description: "Appartement F3 en bon état dans une résidence HLM. Séjour double, deux chambres, cuisine séparée, salle de bain. Charges modérées. Proche métro et écoles. Transport en commun à proximité.",
-    price: 480,
-    surface: 63,
-    rooms: 3,
-    bedrooms: 2,
-    bathrooms: 1,
-    floor: 7,
-    furnished: false,
-    heating: "Collectif",
-    elevator: true,
-    parking: false,
-    balcony: true,
-    terrace: false,
-    city: "Toulouse",
-    district: "Mirail",
-    address: "8 Avenue du Mirail",
-    type: "HLM",
-    dpe: "D",
-    status: "Disponible",
-    reference: "JKR-TLS3F3",
-    images: JSON.stringify([
-      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80"
-    ]),
-    latitude: 43.5953,
-    longitude: 1.3980,
-    availabilityDate: "2026-08-01",
-    fees: 80,
-    deposit: 480,
-    yearBuilt: 1995,
-  },
-  {
-    title: "Duplex Haut Standing T4 Bordeaux",
-    description: "Magnifique duplex en plein centre-ville de Bordeaux. Prestations haut de gamme : cuisine équipée, grande terrasse, 3 chambres dont une suite parentale, grand salon cathédrale. Ascenseur, parking. Classé aux Monuments Historiques.",
-    price: 1450,
-    surface: 120,
-    rooms: 4,
-    bedrooms: 3,
-    bathrooms: 2,
-    floor: 4,
-    furnished: true,
-    heating: "Individuel gaz",
-    elevator: true,
-    parking: true,
-    balcony: false,
-    terrace: true,
-    city: "Bordeaux",
-    district: "Chartrons",
-    address: "56 Quai des Chartrons",
-    type: "Privé",
-    dpe: "B",
-    status: "Disponible",
-    reference: "JKR-BDX4T4",
-    images: JSON.stringify([
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80",
-      "https://images.unsplash.com/photo-1618220179428-22790b461013?w=600&q=80"
-    ]),
-    latitude: 44.8378,
-    longitude: -0.5792,
-    availabilityDate: "2026-06-01",
-    fees: 200,
-    deposit: 2900,
-    yearBuilt: 1850,
-    premium: true,
-  },
-  {
-    title: "Chambre Meublée chez l'Habitant Lille",
-    description: "Chambre meublée disponible chez l'habitant dans une maison de ville. Accès salon et cuisine partagés. Quartier sécurisé, proche université et gare. Idéal étudiant. Charges incluses.",
-    price: 350,
-    surface: 14,
-    rooms: 1,
-    bedrooms: 1,
-    bathrooms: 0,
-    floor: 1,
-    furnished: true,
-    heating: "Individuel électrique",
-    elevator: false,
-    parking: false,
-    balcony: false,
-    terrace: false,
-    city: "Lille",
-    district: "Wazemmes",
-    address: "22 Rue de Wazemmes",
-    type: "Privé",
-    dpe: "E",
-    status: "Loué",
-    reference: "JKR-LL3C4M",
-    images: JSON.stringify([
-      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=600&q=80"
-    ]),
-    latitude: 50.6292,
-    longitude: 3.0573,
-    availabilityDate: null,
-    fees: null,
-    deposit: 350,
-    yearBuilt: 1920,
-  },
-  {
-    title: "Appartement Meublé T2 Nice",
-    description: "Appartement meublé T2 avec vue mer. Résidence de standing avec piscine, salle de sport, parking. Cuisine équipée, climatisation, balcon. Front de mer, à 2 min de la Promenade des Anglais.",
-    price: 1100,
-    surface: 50,
-    rooms: 2,
-    bedrooms: 1,
-    bathrooms: 1,
-    floor: 8,
-    furnished: true,
-    heating: "Pompe à chaleur",
-    elevator: true,
-    parking: true,
-    balcony: true,
-    terrace: false,
-    city: "Nice",
-    district: "Promenade des Anglais",
-    address: "88 Promenade des Anglais",
-    type: "Privé",
-    dpe: "A",
-    status: "Disponible",
-    reference: "JKR-N1C3T2",
-    images: JSON.stringify([
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80",
-      "https://images.unsplash.com/photo-1560185007-5f0bb1866cab?w=600&q=80"
-    ]),
-    latitude: 43.6951,
-    longitude: 7.2712,
-    availabilityDate: "2026-07-15",
-    fees: 180,
-    deposit: 2200,
-    yearBuilt: 2020,
-    premium: true,
-  },
-  {
-    title: "Maison T5 avec Jardin Nantes",
-    description: "Magnifique maison T5 avec jardin arboré de 200m². Quartier résidentiel calme. Grande cuisine américaine, salon sur jardin, 4 chambres, garage double. Idéal famille. Proche écoles et tramway.",
-    price: 1350,
-    surface: 130,
-    rooms: 5,
-    bedrooms: 4,
-    bathrooms: 2,
-    floor: 0,
-    furnished: false,
-    heating: "Individuel gaz",
-    elevator: false,
-    parking: true,
-    balcony: false,
-    terrace: true,
-    city: "Nantes",
-    district: "Trentemoult",
-    address: "15 Rue de la Loire",
-    type: "Privé",
-    dpe: "C",
-    status: "Disponible",
-    reference: "JKR-N4T5J1",
-    images: JSON.stringify([
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80"
-    ]),
-    latitude: 47.2184,
-    longitude: -1.5536,
-    availabilityDate: "2026-09-01",
-    fees: 100,
-    deposit: 2700,
-    yearBuilt: 2005,
-  },
-  {
-    title: "Studio Crous Rénové Montpellier",
-    description: "Studio rénové en résidence universitaire Crous. Tout équipé : lit, bureau, kitchenette, salle de douche. Idéal étudiant. À 10 min à pied de la Faculté de Médecine.",
-    price: 280,
-    surface: 18,
-    rooms: 1,
-    bedrooms: 1,
-    bathrooms: 1,
-    floor: 2,
-    furnished: true,
-    heating: "Collectif",
-    elevator: false,
-    parking: false,
-    balcony: false,
-    terrace: false,
-    city: "Montpellier",
-    district: "Centre",
-    address: "3 Rue de l'Université",
-    type: "HLM",
-    dpe: "B",
-    status: "Disponible",
-    reference: "JKR-MPL1S1",
-    images: JSON.stringify([
-      "https://images.unsplash.com/photo-1598928506311-c55ez637a11a?w=600&q=80"
-    ]),
-    latitude: 43.6108,
-    longitude: 3.8767,
-    availabilityDate: "2026-10-01",
-    fees: 40,
-    deposit: 280,
-    yearBuilt: 2012,
-  },
-];
+    latitude: cityData.lat + (Math.random() - 0.5) * 0.1,
+    longitude: cityData.lng + (Math.random() - 0.5) * 0.1,
+    availabilityDate: `2026-${String(randomInt(6, 12)).padStart(2, "0")}-${String(randomInt(1, 28)).padStart(2, "0")}`,
+    fees: Math.round(price * 0.1),
+    deposit: price * 2,
+    yearBuilt: randomInt(1980, 2024),
+    offreDuMoment: flags.offreDuMoment ?? false,
+    premium: flags.premium ?? false,
+  };
+}
+
+const properties: ReturnType<typeof generateProperty>[] = [];
+
+// 15 offreDuMoment
+for (let i = 0; i < 15; i++) {
+  properties.push(generateProperty(i, { offreDuMoment: true }));
+}
+
+// 15 standard (Logement disponible)
+for (let i = 15; i < 30; i++) {
+  properties.push(generateProperty(i, {}));
+}
+
+// 20 premium
+for (let i = 30; i < 50; i++) {
+  properties.push(generateProperty(i, { premium: true }));
+}
 
 async function main() {
   const existing = await prisma.admin.findUnique({ where: { username: "admin" } });
@@ -311,38 +143,24 @@ async function main() {
     await prisma.admin.create({
       data: { username: "admin", password: hashed },
     });
-    console.log("✅ Admin user created: admin / admin123");
+    console.log("Admin user created: admin / admin123");
   } else {
-    console.log("✅ Admin user already exists");
+    console.log("Admin user already exists");
   }
 
   const count = await prisma.property.count();
   if (count === 0) {
-    for (const prop of sampleProperties) {
+    for (const prop of properties) {
       await prisma.property.create({ data: prop });
     }
-    console.log(`✅ ${sampleProperties.length} biens créés`);
+    console.log(`✅ ${properties.length} biens créés`);
   } else {
-    // Update existing properties with type flags
-    await prisma.property.updateMany({
-      where: { offreDuMoment: { not: true } },
-      data: { offreDuMoment: false },
-    });
-    await prisma.property.updateMany({
-      where: { premium: { not: true } },
-      data: { premium: false },
-    });
-    // Set specific properties as offreDuMoment and premium
-    for (const prop of sampleProperties) {
-      await prisma.property.updateMany({
-        where: { reference: prop.reference },
-        data: {
-          offreDuMoment: prop.offreDuMoment ?? false,
-          premium: prop.premium ?? false,
-        },
-      });
+    await prisma.property.deleteMany({});
+    console.log("🗑️  Anciens biens supprimés");
+    for (const prop of properties) {
+      await prisma.property.create({ data: prop });
     }
-    console.log(`✅ ${sampleProperties.length} biens mis à jour avec les types`);
+    console.log(`✅ ${properties.length} nouveaux biens créés`);
   }
 }
 
