@@ -23,6 +23,8 @@ interface PropertyCardProps {
     reference: string;
     furnished: boolean | null;
     fees: number | null;
+    offreDuMoment: boolean;
+    premium: boolean;
   };
 }
 
@@ -41,12 +43,22 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute top-3 left-3 flex flex-wrap gap-2">
           <span className={`px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-lg ${
             property.status === "Disponible" ? "bg-green-500" : "bg-red-500"
           }`}>
             {property.status}
           </span>
+          {property.offreDuMoment && (
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-orange-500 text-white shadow-lg animate-pulse">
+              Offre du moment
+            </span>
+          )}
+          {property.premium && (
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white shadow-lg">
+              Premium
+            </span>
+          )}
           {property.furnished && (
             <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-500 text-white shadow-lg">
               Meublé

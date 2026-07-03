@@ -19,14 +19,16 @@ export default function HeroSection() {
               <span>+800 dossiers accompagnés</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
-              Votre dossier, votre
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300"> meilleure chance </span>
-              de louer
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-4">
+              Trouvez un logement en toute sérénité avec <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">Espace Habitat</span>.
             </h1>
 
-            <p className="text-base md:text-lg text-indigo-100/80 mb-6 leading-relaxed max-w-xl">
-              Nous analysons, structurons et optimisons votre candidature logement pour maximiser vos chances face aux bailleurs.
+            <p className="text-sm md:text-base text-indigo-100/80 mb-4 leading-relaxed">
+              Nous vous accompagnons de A à Z dans votre recherche de logement social : étude de votre situation, constitution d'un dossier solide, orientation vers les bailleurs adaptés et suivi personnalisé de vos démarches.
+            </p>
+
+            <p className="text-sm md:text-base text-indigo-100/60 mb-6 leading-relaxed">
+              Notre objectif est de vous faire gagner du temps et de maximiser vos chances de trouver un logement correspondant à vos besoins.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -34,27 +36,15 @@ export default function HeroSection() {
                 onClick={() => openModal()}
                 className="group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white px-6 py-3.5 rounded-full text-base font-bold transition-all shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 active:scale-[0.97] cursor-pointer"
               >
-                Suivre mon dossier
+                Commencez votre accompagnement dès aujourd'hui
                 <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
               </button>
-              <a
-                href="/#method"
-                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/20 px-6 py-3.5 rounded-full text-base font-semibold transition-all"
-              >
-                Voir comment ça marche
-              </a>
               <a
                 href="/catalog"
                 className="inline-flex items-center justify-center gap-2 bg-white hover:bg-indigo-50 text-indigo-700 px-6 py-3.5 rounded-full text-base font-bold transition-all shadow-lg"
               >
                 Voir les logements disponibles
               </a>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4 text-sm text-indigo-200/80">
-              <span className="flex items-center gap-1.5"><HiCheck className="text-green-400 text-xs" /> Aucun paiement avant validation</span>
-              <span className="flex items-center gap-1.5"><HiCheck className="text-green-400 text-xs" /> Réponse sous 24h</span>
-              <span className="flex items-center gap-1.5"><HiCheck className="text-green-400 text-xs" /> Remboursé si insatisfait</span>
             </div>
           </div>
 

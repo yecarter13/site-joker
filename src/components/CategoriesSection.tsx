@@ -1,0 +1,56 @@
+"use client";
+
+import Link from "next/link";
+import { HiFire, HiHome, HiStar } from "react-icons/hi";
+
+const categories = [
+  {
+    href: "/catalog?filter=offreDuMoment",
+    label: "L'offre du moment",
+    description: "Découvrez nos meilleures offres sélectionnées pour vous",
+    icon: HiFire,
+    bg: "from-orange-500 to-red-500",
+    shadow: "shadow-orange-500/30",
+  },
+  {
+    href: "/catalog?status=Disponible",
+    label: "Logement disponible",
+    description: "Consultez tous nos logements disponibles immédiatement",
+    icon: HiHome,
+    bg: "from-green-500 to-emerald-500",
+    shadow: "shadow-green-500/30",
+  },
+  {
+    href: "/catalog?filter=premium",
+    label: "Location appartement premium",
+    description: "Des logements sélectionnés pour leur qualité exceptionnelle",
+    icon: HiStar,
+    bg: "from-indigo-500 to-purple-500",
+    shadow: "shadow-indigo-500/30",
+  },
+];
+
+export default function CategoriesSection() {
+  return (
+    <section className="py-8 md:py-12 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          {categories.map((cat) => (
+            <Link
+              key={cat.href}
+              href={cat.href}
+              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${cat.bg} p-5 md:p-6 text-white shadow-lg ${cat.shadow} hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]`}
+            >
+              <div className="relative z-10">
+                <cat.icon className="text-2xl md:text-3xl mb-3 opacity-90" />
+                <h3 className="text-lg md:text-xl font-bold mb-1.5">{cat.label}</h3>
+                <p className="text-sm text-white/80">{cat.description}</p>
+              </div>
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-xl" />
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

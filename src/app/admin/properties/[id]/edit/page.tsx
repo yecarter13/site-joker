@@ -37,6 +37,8 @@ interface PropertyData {
   fees: number | null;
   deposit: number | null;
   yearBuilt: number | null;
+  offreDuMoment: boolean;
+  premium: boolean;
 }
 
 function EditPropertyPage() {

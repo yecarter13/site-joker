@@ -43,6 +43,8 @@ interface Property {
   fees: number | null;
   deposit: number | null;
   yearBuilt: number | null;
+  offreDuMoment: boolean;
+  premium: boolean;
 }
 
 export default function PropertyDetailPage() {
@@ -148,12 +150,22 @@ export default function PropertyDetailPage() {
           <div className="relative rounded-2xl overflow-hidden bg-white mb-4 md:mb-6">
             <div className="relative aspect-[4/3] md:aspect-[16/9]">
               <img src={images[currentImage]} alt={property.title} className="w-full h-full object-cover" />
-              <div className="absolute top-3 left-3 flex gap-2">
+              <div className="absolute top-3 left-3 flex flex-wrap gap-2">
                 <span className={`px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-lg ${
                   property.status === "Disponible" ? "bg-green-500" : "bg-red-500"
                 }`}>
                   {property.status}
                 </span>
+                {property.offreDuMoment && (
+                  <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-orange-500 text-white shadow-lg animate-pulse">
+                    Offre du moment
+                  </span>
+                )}
+                {property.premium && (
+                  <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-indigo-600 text-white shadow-lg">
+                    Premium
+                  </span>
+                )}
                 {property.furnished && (
                   <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-indigo-500 text-white shadow-lg">
                     Meublé

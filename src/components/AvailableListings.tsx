@@ -22,6 +22,8 @@ interface Property {
   reference: string;
   furnished: boolean | null;
   fees: number | null;
+  offreDuMoment: boolean;
+  premium: boolean;
 }
 
 const PER_PAGE = 10;

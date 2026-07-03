@@ -36,6 +36,8 @@ interface PropertyFormProps {
     fees: number | null;
     deposit: number | null;
     yearBuilt: number | null;
+    offreDuMoment: boolean;
+    premium: boolean;
   };
 }
 
@@ -48,6 +50,8 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
   const [showExtra, setShowExtra] = useState(!!initial);
   const [lat, setLat] = useState(initial?.latitude?.toString() || "");
   const [lng, setLng] = useState(initial?.longitude?.toString() || "");
+  const [offreDuMoment, setOffreDuMoment] = useState(initial?.offreDuMoment || false);
+  const [premium, setPremium] = useState(initial?.premium || false);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -106,6 +110,8 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
       dpe: form.get("dpe") || null,
       status: form.get("status"),
       images,
+      offreDuMoment,
+      premium,
       mapLink: form.get("mapLink") || null,
       latitude: lat ? parseFloat(lat) : null,
       longitude: lng ? parseFloat(lng) : null,
@@ -168,6 +174,20 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
               <option value="HLM">HLM</option>
             </select>
           </div>
+        </div>
+        <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-gray-100">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <button type="button" onClick={() => setOffreDuMoment(!offreDuMoment)} className={`relative w-10 h-5 rounded-full transition-colors ${offreDuMoment ? "bg-orange-500" : "bg-gray-300"}`}>
+              <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${offreDuMoment ? "translate-x-5" : ""}`} />
+            </button>
+            <span className="text-sm font-medium text-gray-700">L'offre du moment</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <button type="button" onClick={() => setPremium(!premium)} className={`relative w-10 h-5 rounded-full transition-colors ${premium ? "bg-indigo-600" : "bg-gray-300"}`}>
+              <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${premium ? "translate-x-5" : ""}`} />
+            </button>
+            <span className="text-sm font-medium text-gray-700">Location appartement premium</span>
+          </label>
         </div>
       </div>
 

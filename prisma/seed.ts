@@ -37,6 +37,7 @@ const sampleProperties = [
     fees: 120,
     deposit: 950,
     yearBuilt: 2018,
+    offreDuMoment: true,
   },
   {
     title: "Studio Meublé Centre Lyon",
@@ -102,6 +103,7 @@ const sampleProperties = [
     fees: 150,
     deposit: 1780,
     yearBuilt: 2010,
+    offreDuMoment: true,
   },
   {
     title: "Appartement HLM F3 Toulouse",
@@ -167,6 +169,7 @@ const sampleProperties = [
     fees: 200,
     deposit: 2900,
     yearBuilt: 1850,
+    premium: true,
   },
   {
     title: "Chambre Meublée chez l'Habitant Lille",
@@ -232,6 +235,7 @@ const sampleProperties = [
     fees: 180,
     deposit: 2200,
     yearBuilt: 2020,
+    premium: true,
   },
   {
     title: "Maison T5 avec Jardin Nantes",
@@ -317,9 +321,28 @@ async function main() {
     for (const prop of sampleProperties) {
       await prisma.property.create({ data: prop });
     }
-    console.log(`✅ ${sampleProperties.length} biens français créés`);
+    console.log(`✅ ${sampleProperties.length} biens créés`);
   } else {
-    console.log(`✅ ${count} biens existants, seed ignoré`);
+    // Update existing properties with type flags
+    await prisma.property.updateMany({
+      where: { offreDuMoment: { not: true } },
+      data: { offreDuMoment: false },
+    });
+    await prisma.property.updateMany({
+      where: { premium: { not: true } },
+      data: { premium: false },
+    });
+    // Set specific properties as offreDuMoment and premium
+    for (const prop of sampleProperties) {
+      await prisma.property.updateMany({
+        where: { reference: prop.reference },
+        data: {
+          offreDuMoment: prop.offreDuMoment ?? false,
+          premium: prop.premium ?? false,
+        },
+      });
+    }
+    console.log(`✅ ${sampleProperties.length} biens mis à jour avec les types`);
   }
 }
 

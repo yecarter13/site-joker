@@ -49,6 +49,8 @@ export interface PropertyData {
   latitude: number | null;
   longitude: number | null;
   reference: string;
+  offreDuMoment: boolean;
+  premium: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

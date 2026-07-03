@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { Suspense, useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
@@ -22,32 +24,44 @@ interface Property {
   reference: string;
   furnished: boolean | null;
   fees: number | null;
+  offreDuMoment: boolean;
+  premium: boolean;
 }
 
 type SortKey = "price-asc" | "price-desc" | "surface-asc" | "surface-desc" | "rooms-asc" | "rooms-desc";
 
-export default function CatalogPage() {
+function CatalogContent() {
+  const searchParams = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
-
   const [city, setCity] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [type, setType] = useState("");
   const [minRooms, setMinRooms] = useState("");
   const [dpe, setDpe] = useState("");
   const [furnished, setFurnished] = useState("");
+  const [filter, setFilter] = useState(searchParams.get("filter") || "");
+  const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "");
   const [sort, setSort] = useState<SortKey>("price-asc");
 
   useEffect(() => {
-    fetch("/api/properties?status=Disponible")
+    const params = new URLSearchParams();
+    if (statusFilter) params.set("status", statusFilter);
+    else params.set("status", "Disponible");
+    fetch(`/api/properties?${params}`)
       .then((r) => r.json())
       .then((data) => {
         setProperties(data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [statusFilter]);
+
+  useEffect(() => {
+    setFilter(searchParams.get("filter") || "");
+    setStatusFilter(searchParams.get("status") || "");
+  }, [searchParams]);
 
   const filtered = useMemo(() => {
     let result = [...properties];
@@ -58,6 +72,8 @@ export default function CatalogPage() {
     if (dpe) result = result.filter((p) => p.dpe === dpe);
     if (furnished === "oui") result = result.filter((p) => p.furnished === true);
     else if (furnished === "non") result = result.filter((p) => p.furnished === false);
+    if (filter === "offreDuMoment") result = result.filter((p) => p.offreDuMoment);
+    if (filter === "premium") result = result.filter((p) => p.premium);
 
     result.sort((a, b) => {
       switch (sort) {
@@ -72,10 +88,10 @@ export default function CatalogPage() {
     });
 
     return result;
-  }, [city, maxPrice, type, minRooms, dpe, furnished, sort, properties]);
+  }, [city, maxPrice, type, minRooms, dpe, furnished, sort, filter, properties]);
 
   const cities = useMemo(() => [...new Set(properties.map((p) => p.city))].sort(), [properties]);
-  const activeFilters = [city, maxPrice, type, minRooms, dpe, furnished].filter(Boolean).length;
+  const activeFilters = [city, maxPrice, type, minRooms, dpe, furnished, filter, statusFilter].filter(Boolean).length;
 
   function resetFilters() {
     setCity("");
@@ -84,6 +100,8 @@ export default function CatalogPage() {
     setMinRooms("");
     setDpe("");
     setFurnished("");
+    setFilter("");
+    setStatusFilter("");
   }
 
   return (
@@ -164,7 +182,6 @@ export default function CatalogPage() {
               </div>
             </div>
 
-            {/* Pills villes + reset */}
             <div className="flex items-center gap-2 mt-3 overflow-x-auto scrollbar-hide">
               {cities.map((c) => (
                 <button
@@ -191,7 +208,7 @@ export default function CatalogPage() {
         <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-              Logements disponibles
+              {filter === "offreDuMoment" ? "Offres du moment" : filter === "premium" ? "Locations premium" : statusFilter === "Disponible" || !statusFilter ? "Logements disponibles" : "Tous les logements"}
               <span className="text-sm font-normal text-gray-500 ml-2">({filtered.length})</span>
             </h1>
           </div>
@@ -222,5 +239,17 @@ export default function CatalogPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function CatalogPage() {
+  return (
+    <Suspense fallback={
+      <main className="flex-1 bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+      </main>
+    }>
+      <CatalogContent />
+    </Suspense>
   );
 }
