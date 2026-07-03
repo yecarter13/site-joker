@@ -11,8 +11,8 @@ const testimonials = [
     image: "/icone.jpeg",
   },
   {
-    name: "Karim B.",
-    role: "Auto-entrepreneur — Paris · T3",
+    name: "Clara B.",
+    role: "Auto-entrepreneuse — Paris · T3",
     badge: "Prioritaire",
     text: "En tant qu'auto-entrepreneur, impossible de convaincre les propriétaires. Le rapport m'a appris à présenter mes revenus et à choisir les bons justificatifs. Accepté au 2e dossier !",
     image: "/icone1.jpeg",
@@ -39,8 +39,8 @@ const testimonials = [
     image: "/icone4.jpeg",
   },
   {
-    name: "Thomas R.",
-    role: "Étudiant — Lille · Studio",
+    name: "Emma R.",
+    role: "Étudiante — Lille · Studio",
     badge: "Standard",
     text: "Rapport de 8 pages ultra-détaillé avec points forts, faiblesses, liste de documents et stratégie par type de bailleur. Le prix est très raisonnable pour ce niveau de service.",
     image: "/icone5.jpeg",
