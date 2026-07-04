@@ -25,7 +25,7 @@ import { HiCheck, HiStar, HiFire } from "react-icons/hi";
     price: "900",
     desc: "Accompagnement complet jusqu'à l'attribution de votre logement.",
     icon: HiFire,
-    gradient: "from-purple-600 to-pink-600",
+    gradient: "from-blue-700 to-blue-900",
     popular: true,
     features: [
       "Paiement unique — sans abonnement",
@@ -63,12 +63,12 @@ export default function PricingSection() {
               key={plan.name}
               className={`relative bg-white rounded-2xl p-6 border-2 transition-all hover:shadow-xl flex flex-col ${
                 plan.popular
-                  ? "border-purple-400 shadow-lg shadow-purple-100 scale-105 z-10"
+                  ? "border-blue-400 shadow-lg shadow-blue-100 scale-105 z-10"
                   : "border-gray-100 hover:border-blue-200"
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-700 to-blue-900 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
                   Recommandé
                 </div>
               )}
@@ -89,7 +89,7 @@ export default function PricingSection() {
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
                     <HiCheck className={`mt-0.5 flex-shrink-0 ${
-                      plan.popular ? "text-purple-500" : "text-blue-500"
+                      "text-blue-500"
                     }`} />
                     <span>{f}</span>
                   </li>
@@ -99,9 +99,7 @@ export default function PricingSection() {
               <button
                 onClick={() => openModal(`Formule ${plan.name}`, plan.id)}
                 className={`w-full py-3 rounded-xl text-sm font-bold transition-all shadow-lg hover:shadow-xl active:scale-95 cursor-pointer text-white ${
-                  plan.popular
-                    ? "bg-gradient-to-r from-purple-600 to-pink-600"
-                    : `bg-gradient-to-r ${plan.gradient}`
+                  `bg-gradient-to-r ${plan.gradient}`
                 }`}
               >
                 {plan.popular ? "Choisir Premium" : "Choisir Standard"}

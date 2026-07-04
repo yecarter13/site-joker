@@ -6,7 +6,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
-import { HiSearch, HiFilter, HiX, HiSortAscending, HiSortDescending } from "react-icons/hi";
+import { HiSearch, HiFilter, HiX } from "react-icons/hi";
 
 interface Property {
   id: string;
@@ -116,7 +116,7 @@ function CatalogContent() {
             >
               <HiFilter /> Filtres
               {activeFilters > 0 && (
-                <span className="bg-indigo-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                <span className="bg-blue-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">
                   {activeFilters}
                 </span>
               )}
@@ -130,11 +130,11 @@ function CatalogContent() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="Rechercher par ville..."
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
               <div className="flex flex-wrap gap-2.5">
-                <select value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                <select value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                   <option value="">Budget max</option>
                   <option value="500">500 €</option>
                   <option value="800">800 €</option>
@@ -143,12 +143,12 @@ function CatalogContent() {
                   <option value="2000">2 000 €</option>
                   <option value="3000">3 000 €</option>
                 </select>
-                <select value={type} onChange={(e) => setType(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                <select value={type} onChange={(e) => setType(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                   <option value="">Type</option>
                   <option value="Prive">Prive</option>
                   <option value="HLM">HLM</option>
                 </select>
-                <select value={minRooms} onChange={(e) => setMinRooms(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                <select value={minRooms} onChange={(e) => setMinRooms(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                   <option value="">Pieces min</option>
                   <option value="1">1+</option>
                   <option value="2">2+</option>
@@ -156,7 +156,7 @@ function CatalogContent() {
                   <option value="4">4+</option>
                   <option value="5">5+</option>
                 </select>
-                <select value={dpe} onChange={(e) => setDpe(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                <select value={dpe} onChange={(e) => setDpe(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                   <option value="">DPE</option>
                   <option value="A">A</option>
                   <option value="B">B</option>
@@ -166,12 +166,12 @@ function CatalogContent() {
                   <option value="F">F</option>
                   <option value="G">G</option>
                 </select>
-                <select value={furnished} onChange={(e) => setFurnished(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                <select value={furnished} onChange={(e) => setFurnished(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                   <option value="">Meuble</option>
                   <option value="oui">Oui</option>
                   <option value="non">Non</option>
                 </select>
-                <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                   <option value="price-asc">Prix croissant</option>
                   <option value="price-desc">Prix decroissant</option>
                   <option value="surface-asc">Surface croissante</option>
@@ -189,7 +189,7 @@ function CatalogContent() {
                   onClick={() => setCity(city === c ? "" : c)}
                   className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
                     city === c
-                      ? "bg-indigo-600 text-white"
+                      ? "bg-blue-600 text-white"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
@@ -215,14 +215,14 @@ function CatalogContent() {
 
           {loading ? (
             <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
             </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-20">
               <div className="text-5xl mb-4 text-gray-300">[ ]</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucun logement trouve</h3>
               <p className="text-gray-500">Essayez de modifier vos filtres</p>
-              <button onClick={resetFilters} className="mt-4 text-indigo-600 font-semibold text-sm hover:underline cursor-pointer">
+              <button onClick={resetFilters} className="mt-4 text-blue-600 font-semibold text-sm hover:underline cursor-pointer">
                 Reinitialiser les filtres
               </button>
             </div>
@@ -246,7 +246,7 @@ export default function CatalogPage() {
   return (
     <Suspense fallback={
       <main className="flex-1 bg-gray-50 min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
       </main>
     }>
       <CatalogContent />

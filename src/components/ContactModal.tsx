@@ -8,8 +8,8 @@ import { HiX, HiCheck } from "react-icons/hi";
 import { FaArrowLeft } from "react-icons/fa";
 
 const plans = [
-  { id: "standard", name: "Standard", price: "700 €", gradient: "from-blue-600 to-indigo-600", features: ["Analyse complete du profil", "Rapport personnalise detaille", "Points forts & faiblesses", "Liste des documents", "Garantie satisfait 30j"] },
-  { id: "premium", name: "Premium", price: "900 €", gradient: "from-purple-600 to-pink-600", popular: true, features: ["Tout le Standard", "Verification du dossier", "Suivi jusqu a l attribution", "Assistance caution & 1er loyer", "Accompagnement complet"] },
+  { id: "standard", name: "Standard", price: "700 €", gradient: "from-blue-600 to-blue-800", features: ["Analyse complete du profil", "Rapport personnalise detaille", "Points forts & faiblesses", "Liste des documents", "Garantie satisfait 30j"] },
+  { id: "premium", name: "Premium", price: "900 €", gradient: "from-blue-700 to-blue-900", popular: true, features: ["Tout le Standard", "Verification du dossier", "Suivi jusqu a l attribution", "Assistance caution & 1er loyer", "Accompagnement complet"] },
 ];
 
 const selectOptions = {
@@ -117,9 +117,9 @@ export default function ContactModal() {
               <FSelect label="Avez-vous un garant ?" value={form.garant} onChange={(v) => update("garant", v)} options={selectOptions.garant} required />
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Votre situation (optionnel)</label>
-                <textarea value={form.message} onChange={(e) => update("message", e.target.value)} rows={2} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="Precisez si besoin..." />
+                <textarea value={form.message} onChange={(e) => update("message", e.target.value)} rows={2} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="Precisez si besoin..." />
               </div>
-              <button type="submit" className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg">
+              <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-500 hover:to-blue-700 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg">
                 {preselectedPlan ? "Envoyer ma demande →" : "Continuer →"}
               </button>
               <p className="text-[10px] text-gray-400 text-center">En cliquant, vous acceptez d&apos;etre contacte par nos services.</p>
@@ -151,7 +151,7 @@ export default function ContactModal() {
                   onClick={() => setSelectedPlan(plan.id)}
                   className={`w-full text-left rounded-xl border-2 p-4 transition-all cursor-pointer ${
                     selectedPlan === plan.id
-                      ? plan.popular ? "border-purple-400 bg-purple-50" : "border-blue-400 bg-blue-50"
+                      ? "border-blue-400 bg-blue-50"
                       : "border-gray-200 bg-white hover:border-gray-300"
                   }`}
                 >
@@ -159,12 +159,12 @@ export default function ContactModal() {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-gray-900">{plan.name}</span>
-                        {plan.popular && <span className="text-[10px] bg-gradient-to-r from-purple-600 to-pink-600 text-white px-2 py-0.5 rounded-full font-semibold">Recommande</span>}
+                        {plan.popular && <span className="text-[10px] bg-gradient-to-r from-blue-700 to-blue-900 text-white px-2 py-0.5 rounded-full font-semibold">Recommande</span>}
                       </div>
                       <div className={`text-lg font-extrabold mt-1 bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`}>{plan.price}</div>
                     </div>
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 ${
-                      selectedPlan === plan.id ? (plan.popular ? "border-purple-500 bg-purple-500" : "border-blue-500 bg-blue-500") : "border-gray-300"
+                      selectedPlan === plan.id ? "border-blue-500 bg-blue-500" : "border-gray-300"
                     }`}>
                       {selectedPlan === plan.id && <HiCheck className="text-white text-[10px]" />}
                     </div>
@@ -172,7 +172,7 @@ export default function ContactModal() {
                   <ul className="space-y-1">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-center gap-1.5 text-xs text-gray-600">
-                        <HiCheck className={`text-[10px] flex-shrink-0 ${plan.popular ? "text-purple-500" : "text-blue-500"}`} />
+                        <HiCheck className="text-[10px] flex-shrink-0 text-blue-500" />
                         {f}
                       </li>
                     ))}
@@ -183,7 +183,7 @@ export default function ContactModal() {
                 type="button"
                 onClick={handlePlanSubmit}
                 disabled={!selectedPlan}
-                className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-500 hover:to-blue-700 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 {selectedPlan ? `Choisir ${plans.find((p) => p.id === selectedPlan)?.name} →` : "Selectionnez une formule"}
               </button>
@@ -198,7 +198,7 @@ export default function ContactModal() {
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-2">Message envoye !</h3>
             <p className="text-sm text-gray-500 mb-6">Redirection vers WhatsApp...</p>
-            <button onClick={handleClose} className="text-indigo-600 font-semibold text-sm hover:underline cursor-pointer">Fermer</button>
+            <button onClick={handleClose} className="text-blue-600 font-semibold text-sm hover:underline cursor-pointer">Fermer</button>
           </div>
         )}
 
@@ -213,7 +213,7 @@ function FInput({ label, value, onChange, type = "text", required }: {
   return (
     <div>
       <label className="block text-xs font-medium text-gray-700 mb-1">{label} <span className="text-red-400">*</span></label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
     </div>
   );
 }
