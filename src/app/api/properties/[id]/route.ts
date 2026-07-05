@@ -8,7 +8,7 @@ export async function GET(
   const { id } = await params;
   const property = await prisma.property.findUnique({ where: { id } });
   if (!property) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json({ ...property, images: JSON.parse(property.images) });
+  return NextResponse.json({ ...property, images: JSON.parse(property.images || "[]") });
 }
 
 export async function PUT(
@@ -24,7 +24,7 @@ export async function PUT(
       images: typeof body.images === "string" ? body.images : JSON.stringify(body.images || []),
     },
   });
-  return NextResponse.json({ ...property, images: JSON.parse(property.images) });
+  return NextResponse.json({ ...property, images: JSON.parse(property.images || "[]") });
 }
 
 export async function DELETE(
