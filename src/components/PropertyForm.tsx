@@ -52,6 +52,8 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
   const [lng, setLng] = useState(initial?.longitude?.toString() || "");
   const [offreDuMoment, setOffreDuMoment] = useState(initial?.offreDuMoment || false);
   const [premium, setPremium] = useState(initial?.premium || false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -85,15 +87,25 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
+    setSuccess("");
     setSaving(true);
     const form = new FormData(e.currentTarget);
+
+    const price = parseFloat(form.get("price") as string);
+    const surface = parseFloat(form.get("surface") as string);
+    const rooms = parseInt(form.get("rooms") as string);
+
+    if (price <= 0) { setError("Le prix doit être supérieur à 0."); setSaving(false); return; }
+    if (surface <= 0) { setError("La surface doit être supérieure à 0."); setSaving(false); return; }
+    if (rooms <= 0) { setError("Le nombre de pièces doit être supérieur à 0."); setSaving(false); return; }
 
     const data: Record<string, unknown> = {
       title: form.get("title"),
       description: form.get("description"),
-      price: parseFloat(form.get("price") as string),
-      surface: parseFloat(form.get("surface") as string),
-      rooms: parseInt(form.get("rooms") as string),
+      price,
+      surface,
+      rooms,
       bedrooms: form.get("bedrooms") ? parseInt(form.get("bedrooms") as string) : null,
       bathrooms: form.get("bathrooms") ? parseInt(form.get("bathrooms") as string) : null,
       floor: form.get("floor") ? parseInt(form.get("floor") as string) : null,
@@ -121,14 +133,23 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
       yearBuilt: form.get("yearBuilt") ? parseInt(form.get("yearBuilt") as string) : null,
     };
 
-    const url = initial ? `/api/properties/${initial.id}` : "/api/properties";
-    const method = initial ? "PUT" : "POST";
+    try {
+      const url = initial ? `/api/properties/${initial.id}` : "/api/properties";
+      const method = initial ? "PUT" : "POST";
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      const result = await res.json();
 
-    await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      if (!res.ok) {
+        throw new Error(result.error || "Erreur lors de l'enregistrement.");
+      }
 
-    setSaving(false);
-    router.push("/admin");
-    router.refresh();
+      setSuccess(initial ? "Logement mis à jour avec succès !" : "Logement créé avec succès !");
+      setTimeout(() => { router.push("/admin"); router.refresh(); }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur inconnue.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   const mapSrc = lat && lng
@@ -137,6 +158,16 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+          <span>⚠️</span> {error}
+        </div>
+      )}
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+          <span>✓</span> {success}
+        </div>
+      )}
       {/* Informations principales */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
