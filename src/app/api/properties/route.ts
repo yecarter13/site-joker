@@ -27,9 +27,10 @@ export async function GET(request: Request) {
 
     return NextResponse.json(parsed);
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Erreur inconnue";
     console.error("GET /api/properties error:", error);
     return NextResponse.json(
-      { error: "Erreur de connexion à la base de données." },
+      { error: message },
       { status: 500 }
     );
   }
@@ -46,9 +47,10 @@ export async function POST(request: Request) {
     });
     return NextResponse.json({ ...property, images: JSON.parse(property.images) });
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Erreur inconnue";
     console.error("POST /api/properties error:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la création du logement. Vérifiez que la base de données est accessible et que les migrations sont à jour." },
+      { error: message },
       { status: 500 }
     );
   }
