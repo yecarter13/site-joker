@@ -26,10 +26,10 @@ model Property {
   city        String
   district    String?
   address     String?
-  type        String   @default("Privé")
+  type        String?  @default("Privé")
   dpe         String?
-  status      String   @default("Disponible")
-  images      String   @default("[]")
+  status      String?  @default("Disponible")
+  images      String?  @default("[]")
   mapLink     String?
   latitude    Float?
   longitude   Float?

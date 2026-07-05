@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
     const parsed = properties.map((p) => ({
       ...p,
-      images: JSON.parse(p.images),
+      images: JSON.parse(p.images || "[]"),
     }));
 
     return NextResponse.json(parsed);
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
         images: JSON.stringify(body.images || []),
       },
     });
-    return NextResponse.json({ ...property, images: JSON.parse(property.images) });
+    return NextResponse.json({ ...property, images: JSON.parse(property.images || "[]") });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Erreur inconnue";
     console.error("POST /api/properties error:", error);
