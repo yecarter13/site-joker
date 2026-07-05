@@ -33,7 +33,7 @@ model Property {
   mapLink     String?
   latitude    Float?
   longitude   Float?
-  reference   String   @unique
+  reference   String?  @unique
   availabilityDate String?
   fees        Float?
   deposit     Float?

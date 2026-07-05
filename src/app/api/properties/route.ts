@@ -40,9 +40,12 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    const count = await prisma.property.count();
+    const reference = body.reference || `JKR-${(count + 1).toString().padStart(4, "0")}`;
     const property = await prisma.property.create({
       data: {
         ...body,
+        reference,
         images: JSON.stringify(body.images || []),
       },
     });
