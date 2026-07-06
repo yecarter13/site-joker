@@ -40,8 +40,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const count = await prisma.property.count();
-    const reference = body.reference || `JKR-${(count + 1).toString().padStart(4, "0")}`;
+    const reference = body.reference || `JKR-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     const property = await prisma.property.create({
       data: {
         ...body,

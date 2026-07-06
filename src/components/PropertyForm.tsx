@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { generateReference } from "@/lib/utils";
 import { HiPlus, HiX, HiPhotograph, HiLocationMarker, HiChevronDown, HiChevronUp, HiMap } from "react-icons/hi";
 
 interface PropertyFormProps {
@@ -178,10 +177,6 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
           <div className="space-y-1">
             <label className="block text-sm font-medium text-gray-700">Titre du bien *</label>
             <input name="title" defaultValue={initial?.title} required className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" placeholder="Ex: Appartement moderne F2" />
-          </div>
-          <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">Reference</label>
-            <input name="reference" defaultValue={initial ? undefined : generateReference()} readOnly className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-500" />
           </div>
           <div className="space-y-1">
             <label className="block text-sm font-medium text-gray-700">Prix (loyer CC) *</label>
