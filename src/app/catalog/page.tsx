@@ -6,7 +6,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
-import { HiSearch, HiFilter, HiX } from "react-icons/hi";
+import { HiLocationMarker, HiRefresh } from "react-icons/hi";
 
 interface Property {
   id: string;
@@ -28,50 +28,59 @@ interface Property {
   premium: boolean;
 }
 
-type SortKey = "price-asc" | "price-desc" | "surface-asc" | "surface-desc" | "rooms-asc" | "rooms-desc";
+type SortKey = "price-asc" | "price-desc" | "surface-asc" | "surface-desc" | "rooms-asc" | "rooms-desc" | "date-asc";
+
+const MIN_PRICE = 0;
+const MAX_PRICE = 3000;
 
 function CatalogContent() {
   const searchParams = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
+
+  // Pending filter state (applied only on "Afficher")
+  const [pendingCity, setPendingCity] = useState("");
+  const [pendingMinPrice, setPendingMinPrice] = useState(MIN_PRICE);
+  const [pendingMaxPrice, setPendingMaxPrice] = useState(MAX_PRICE);
+  const [pendingRooms, setPendingRooms] = useState("");
+  const [pendingTypeAppart, setPendingTypeAppart] = useState(false);
+  const [pendingTypeMaison, setPendingTypeMaison] = useState(false);
+
+  // Active filter state (after clicking "Afficher")
   const [city, setCity] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [type, setType] = useState("");
-  const [minRooms, setMinRooms] = useState("");
-  const [dpe, setDpe] = useState("");
-  const [furnished, setFurnished] = useState("");
-  const [filter, setFilter] = useState(searchParams.get("filter") || "");
-  const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "");
+  const [minPrice, setMinPrice] = useState(MIN_PRICE);
+  const [maxPrice, setMaxPrice] = useState(MAX_PRICE);
+  const [rooms, setRooms] = useState("");
+  const [typeAppart, setTypeAppart] = useState(false);
+  const [typeMaison, setTypeMaison] = useState(false);
   const [sort, setSort] = useState<SortKey>("price-asc");
+  const [filter, setFilter] = useState(searchParams.get("filter") || "");
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (statusFilter) params.set("status", statusFilter);
-    else params.set("status", "Disponible");
-    fetch(`/api/properties?${params}`)
+    fetch(`/api/properties?status=Disponible`)
       .then((r) => r.json())
       .then((data) => {
         setProperties(data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [statusFilter]);
+  }, []);
 
   useEffect(() => {
     setFilter(searchParams.get("filter") || "");
-    setStatusFilter(searchParams.get("status") || "");
   }, [searchParams]);
+
+  // Compute actual min/max from data
+  const dataMinPrice = useMemo(() => properties.length ? Math.min(...properties.map((p) => p.price)) : MIN_PRICE, [properties]);
+  const dataMaxPrice = useMemo(() => properties.length ? Math.max(...properties.map((p) => p.price)) : MAX_PRICE, [properties]);
 
   const filtered = useMemo(() => {
     let result = [...properties];
     if (city) result = result.filter((p) => p.city.toLowerCase().includes(city.toLowerCase()));
-    if (maxPrice) result = result.filter((p) => p.price <= parseFloat(maxPrice));
-    if (type) result = result.filter((p) => p.type === type);
-    if (minRooms) result = result.filter((p) => p.rooms >= parseInt(minRooms));
-    if (dpe) result = result.filter((p) => p.dpe === dpe);
-    if (furnished === "oui") result = result.filter((p) => p.furnished === true);
-    else if (furnished === "non") result = result.filter((p) => p.furnished === false);
+    result = result.filter((p) => p.price >= minPrice && p.price <= maxPrice);
+    if (rooms) result = result.filter((p) => p.rooms >= parseInt(rooms));
+    if (typeAppart && !typeMaison) result = result.filter((p) => p.type?.toLowerCase().includes("appart") || p.rooms <= 4);
+    if (typeMaison && !typeAppart) result = result.filter((p) => p.type?.toLowerCase().includes("maison") || p.rooms >= 3);
     if (filter === "offreDuMoment") result = result.filter((p) => p.offreDuMoment);
     if (filter === "premium") result = result.filter((p) => p.premium);
 
@@ -88,152 +97,233 @@ function CatalogContent() {
     });
 
     return result;
-  }, [city, maxPrice, type, minRooms, dpe, furnished, sort, filter, properties]);
+  }, [city, minPrice, maxPrice, rooms, typeAppart, typeMaison, sort, filter, properties]);
 
   const cities = useMemo(() => [...new Set(properties.map((p) => p.city))].sort(), [properties]);
-  const activeFilters = [city, maxPrice, type, minRooms, dpe, furnished, filter, statusFilter].filter(Boolean).length;
+
+  function applyFilters() {
+    setCity(pendingCity);
+    setMinPrice(pendingMinPrice);
+    setMaxPrice(pendingMaxPrice);
+    setRooms(pendingRooms);
+    setTypeAppart(pendingTypeAppart);
+    setTypeMaison(pendingTypeMaison);
+  }
 
   function resetFilters() {
+    setPendingCity("");
+    setPendingMinPrice(dataMinPrice);
+    setPendingMaxPrice(dataMaxPrice);
+    setPendingRooms("");
+    setPendingTypeAppart(false);
+    setPendingTypeMaison(false);
     setCity("");
-    setMaxPrice("");
-    setType("");
-    setMinRooms("");
-    setDpe("");
-    setFurnished("");
+    setMinPrice(MIN_PRICE);
+    setMaxPrice(MAX_PRICE);
+    setRooms("");
+    setTypeAppart(false);
+    setTypeMaison(false);
     setFilter("");
-    setStatusFilter("");
   }
+
+  // Slider percentage helpers
+  const priceRange = dataMaxPrice - dataMinPrice || 1;
+  const leftPct = ((pendingMinPrice - dataMinPrice) / priceRange) * 100;
+  const rightPct = 100 - ((pendingMaxPrice - dataMinPrice) / priceRange) * 100;
 
   return (
     <>
       <Header />
       <main className="flex-1 bg-gray-50 min-h-screen">
-        <div className="bg-white border-b border-gray-200 sticky top-16 z-40 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-3 md:py-4">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex md:hidden items-center gap-2 text-sm font-medium text-gray-700 mb-2 cursor-pointer"
-            >
-              <HiFilter /> Filtres
-              {activeFilters > 0 && (
-                <span className="bg-blue-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                  {activeFilters}
-                </span>
-              )}
-              <span className="text-gray-400 ml-1">{showFilters ? "▲" : "▼"}</span>
-            </button>
 
-            <div className={`${showFilters || "hidden"} md:flex flex-col md:flex-row gap-2.5`}>
-              <div className="flex-1 relative">
-                <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        {/* ── FILTER PANEL ── */}
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
+
+            {/* Nombre de pièces */}
+            <div>
+              <select
+                value={pendingRooms}
+                onChange={(e) => setPendingRooms(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm text-gray-700 bg-white appearance-none focus:ring-2 focus:ring-red-400 outline-none"
+              >
+                <option value="">Nombre de pièces</option>
+                <option value="1">1+ pièce</option>
+                <option value="2">2+ pièces</option>
+                <option value="3">3+ pièces</option>
+                <option value="4">4+ pièces</option>
+                <option value="5">5+ pièces</option>
+              </select>
+            </div>
+
+            {/* Type : Maison / Appartement */}
+            <div className="flex items-center gap-6">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
                 <input
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="Rechercher par ville..."
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  type="checkbox"
+                  checked={pendingTypeMaison}
+                  onChange={(e) => setPendingTypeMaison(e.target.checked)}
+                  className="w-5 h-5 rounded border-gray-400 accent-red-500 cursor-pointer"
                 />
+                <span className="text-sm font-semibold text-gray-800">Maison</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={pendingTypeAppart}
+                  onChange={(e) => setPendingTypeAppart(e.target.checked)}
+                  className="w-5 h-5 rounded border-gray-400 accent-red-500 cursor-pointer"
+                />
+                <span className="text-sm font-semibold text-gray-800">Appartement</span>
+              </label>
+            </div>
+
+            {/* Slider de prix */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs text-gray-500">{dataMinPrice} €</span>
+                <div className="flex items-center gap-2">
+                  <span className="border border-gray-300 rounded px-2 py-1 text-sm font-semibold text-gray-800 min-w-[70px] text-center">
+                    {pendingMinPrice}
+                  </span>
+                  <span className="text-gray-400">-</span>
+                  <span className="border border-gray-300 rounded px-2 py-1 text-sm font-semibold text-gray-800 min-w-[70px] text-center">
+                    {pendingMaxPrice}
+                  </span>
+                </div>
+                <span className="text-xs text-gray-500">{dataMaxPrice} €</span>
               </div>
-              <div className="flex flex-wrap gap-2.5">
-                <select value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                  <option value="">Budget max</option>
-                  <option value="500">500 €</option>
-                  <option value="800">800 €</option>
-                  <option value="1000">1 000 €</option>
-                  <option value="1500">1 500 €</option>
-                  <option value="2000">2 000 €</option>
-                  <option value="3000">3 000 €</option>
-                </select>
-                <select value={type} onChange={(e) => setType(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                  <option value="">Type</option>
-                  <option value="Prive">Prive</option>
-                  <option value="HLM">HLM</option>
-                </select>
-                <select value={minRooms} onChange={(e) => setMinRooms(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                  <option value="">Pieces min</option>
-                  <option value="1">1+</option>
-                  <option value="2">2+</option>
-                  <option value="3">3+</option>
-                  <option value="4">4+</option>
-                  <option value="5">5+</option>
-                </select>
-                <select value={dpe} onChange={(e) => setDpe(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                  <option value="">DPE</option>
-                  <option value="A">A</option>
-                  <option value="B">B</option>
-                  <option value="C">C</option>
-                  <option value="D">D</option>
-                  <option value="E">E</option>
-                  <option value="F">F</option>
-                  <option value="G">G</option>
-                </select>
-                <select value={furnished} onChange={(e) => setFurnished(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                  <option value="">Meuble</option>
-                  <option value="oui">Oui</option>
-                  <option value="non">Non</option>
-                </select>
-                <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                  <option value="price-asc">Prix croissant</option>
-                  <option value="price-desc">Prix decroissant</option>
-                  <option value="surface-asc">Surface croissante</option>
-                  <option value="surface-desc">Surface decroissante</option>
-                  <option value="rooms-asc">Pieces croissant</option>
-                  <option value="rooms-desc">Pieces decroissant</option>
-                </select>
+              {/* Double range slider */}
+              <div className="relative h-6 flex items-center">
+                <div className="absolute left-0 right-0 h-1.5 bg-gray-200 rounded-full" />
+                <div
+                  className="absolute h-1.5 bg-red-500 rounded-full"
+                  style={{ left: `${leftPct}%`, right: `${rightPct}%` }}
+                />
+                <input
+                  type="range"
+                  min={dataMinPrice}
+                  max={dataMaxPrice}
+                  value={pendingMinPrice}
+                  onChange={(e) => {
+                    const val = Math.min(Number(e.target.value), pendingMaxPrice - 50);
+                    setPendingMinPrice(val);
+                  }}
+                  className="absolute w-full h-1.5 opacity-0 cursor-pointer z-20"
+                />
+                <input
+                  type="range"
+                  min={dataMinPrice}
+                  max={dataMaxPrice}
+                  value={pendingMaxPrice}
+                  onChange={(e) => {
+                    const val = Math.max(Number(e.target.value), pendingMinPrice + 50);
+                    setPendingMaxPrice(val);
+                  }}
+                  className="absolute w-full h-1.5 opacity-0 cursor-pointer z-20"
+                />
+                {/* Thumbs visual */}
+                <div
+                  className="absolute w-5 h-5 bg-white border-2 border-red-500 rounded-full shadow z-10 -translate-x-1/2"
+                  style={{ left: `${leftPct}%` }}
+                />
+                <div
+                  className="absolute w-5 h-5 bg-white border-2 border-red-500 rounded-full shadow z-10 translate-x-1/2"
+                  style={{ right: `${rightPct}%` }}
+                />
               </div>
             </div>
 
-            <div className="flex items-center gap-2 mt-3 overflow-x-auto scrollbar-hide">
-              {cities.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setCity(city === c ? "" : c)}
-                  className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
-                    city === c
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
-              {activeFilters > 0 && (
-                <button onClick={resetFilters} className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 transition-colors whitespace-nowrap cursor-pointer">
-                  <HiX size={12} /> Tout effacer
-                </button>
+            {/* Localisation */}
+            <div className="relative">
+              <HiLocationMarker className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
+              <input
+                value={pendingCity}
+                onChange={(e) => setPendingCity(e.target.value)}
+                placeholder="Où souhaitez-vous habiter ?"
+                className="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-3 text-sm text-gray-700 focus:ring-2 focus:ring-red-400 outline-none"
+              />
+              {cities.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {cities.slice(0, 6).map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setPendingCity(pendingCity === c ? "" : c)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors cursor-pointer ${
+                        pendingCity === c
+                          ? "bg-red-500 text-white"
+                          : "bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-600"
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
               )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-4 pt-1">
+              <button
+                onClick={applyFilters}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold px-8 py-3 rounded-lg text-sm transition-colors cursor-pointer shadow-md"
+              >
+                Afficher
+              </button>
+              <button
+                onClick={resetFilters}
+                className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-red-500 font-medium transition-colors cursor-pointer"
+              >
+                <HiRefresh className="text-base" />
+                Réinitialiser tous les critères
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-              {filter === "offreDuMoment" ? "Offres du moment" : filter === "premium" ? "Locations premium" : statusFilter === "Disponible" || !statusFilter ? "Logements disponibles" : "Tous les logements"}
-              <span className="text-sm font-normal text-gray-500 ml-2">({filtered.length})</span>
-            </h1>
+        {/* ── RESULTS ── */}
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          {/* Tri + compteur */}
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold text-gray-800">{filtered.length}</span> logement{filtered.length > 1 ? "s" : ""} trouvé{filtered.length > 1 ? "s" : ""}
+            </p>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortKey)}
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 bg-white focus:ring-2 focus:ring-red-400 outline-none"
+            >
+              <option value="price-asc">Prix croissant</option>
+              <option value="price-desc">Prix décroissant</option>
+              <option value="surface-asc">Surface croissante</option>
+              <option value="surface-desc">Surface décroissante</option>
+              <option value="rooms-asc">Pièces croissant</option>
+              <option value="rooms-desc">Pièces décroissant</option>
+            </select>
           </div>
 
           {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+            <div className="flex justify-center py-24">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500" />
             </div>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="text-5xl mb-4 text-gray-300">[ ]</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucun logement trouve</h3>
-              <p className="text-gray-500">Essayez de modifier vos filtres</p>
-              <button onClick={resetFilters} className="mt-4 text-blue-600 font-semibold text-sm hover:underline cursor-pointer">
-                Reinitialiser les filtres
+            <div className="text-center py-24">
+              <div className="text-6xl mb-4">🏠</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Aucun logement trouvé</h3>
+              <p className="text-gray-500 text-sm mb-4">Essayez de modifier vos critères de recherche</p>
+              <button
+                onClick={resetFilters}
+                className="text-red-500 font-semibold text-sm hover:underline cursor-pointer"
+              >
+                Réinitialiser les filtres
               </button>
             </div>
           ) : (
-            <>
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-                {filtered.map((p) => (
-                  <PropertyCard key={p.id} property={p} />
-                ))}
-              </div>
-            </>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {filtered.map((p) => (
+                <PropertyCard key={p.id} property={p} />
+              ))}
+            </div>
           )}
         </div>
       </main>
@@ -246,7 +336,7 @@ export default function CatalogPage() {
   return (
     <Suspense fallback={
       <main className="flex-1 bg-gray-50 min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500" />
       </main>
     }>
       <CatalogContent />
