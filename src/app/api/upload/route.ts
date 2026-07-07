@@ -10,7 +10,12 @@ export async function POST(request: Request) {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  // Use /tmp on Vercel (writable), public/images locally
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const { put } = await import("@vercel/blob");
+    const blob = await put(file.name, buffer, { access: "public" });
+    return NextResponse.json({ url: blob.url });
+  }
+
   const uploadDir =
     process.env.VERCEL === "1"
       ? "/tmp/images"
