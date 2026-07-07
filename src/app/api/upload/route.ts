@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -10,22 +9,23 @@ export async function POST(request: Request) {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const { put } = await import("@vercel/blob");
-    const blob = await put(file.name, buffer, { access: "public" });
-    return NextResponse.json({ url: blob.url });
+  const uniqueName = `${Date.now()}-${file.name}`;
+
+  const { error } = await supabaseAdmin.storage
+    .from("images")
+    .upload(uniqueName, buffer, {
+      contentType: file.type,
+      upsert: false,
+    });
+
+  if (error) {
+    console.error("Supabase upload error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  const uploadDir =
-    process.env.VERCEL === "1"
-      ? "/tmp/images"
-      : path.join(process.cwd(), "public", "images");
+  const { data: publicUrl } = supabaseAdmin.storage
+    .from("images")
+    .getPublicUrl(uniqueName);
 
-  await mkdir(uploadDir, { recursive: true });
-
-  const uniqueName = `${Date.now()}-${file.name}`;
-  const filePath = path.join(uploadDir, uniqueName);
-  await writeFile(filePath, buffer);
-
-  return NextResponse.json({ url: `/api/images/${uniqueName}` });
+  return NextResponse.json({ url: publicUrl.publicUrl });
 }
