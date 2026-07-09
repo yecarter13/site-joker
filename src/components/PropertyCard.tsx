@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { formatPrice, formatSurface } from "@/lib/utils";
+import { useModal } from "@/lib/ModalContext";
 
 interface PropertyCardProps {
   property: {
@@ -18,6 +19,7 @@ interface PropertyCardProps {
     offreDuMoment: boolean;
     premium: boolean;
     fees?: number | null;
+    reference?: string | null;
   };
 }
 
@@ -27,6 +29,7 @@ function getTLabel(rooms: number): string {
 }
 
 export default function PropertyCard({ property }: PropertyCardProps) {
+  const { openModal } = useModal();
   const imageUrl =
     property.images && property.images.length > 0
       ? property.images[0]
@@ -89,6 +92,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         >
           Voir le détail
         </Link>
+        <button
+          onClick={() => openModal(`${property.title} - ${property.city} (Réf: ${property.reference ?? ""})`)}
+          className="w-full text-center bg-white hover:bg-gray-50 text-red-500 border border-red-200 hover:border-red-300 text-xs font-bold py-2 rounded-lg transition-colors cursor-pointer"
+        >
+          Déposer candidature
+        </button>
       </div>
     </div>
   );

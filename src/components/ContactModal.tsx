@@ -58,14 +58,17 @@ export default function ContactModal() {
       ? `Bonjour, je suis interesse par le logement : ${propertyInfo}\n\n`
       : "Bonjour, je souhaite faire analyser mon dossier de location.\n\n";
     const details = [
-      `Formule choisie : ${plan?.name} (${plan?.price})`,
-      `Budget loyer : ${form.budget}`,
+      plan ? `Formule choisie : ${plan.name} (${plan.price})` : "",
+      propertyInfo ? "" : `Budget loyer : ${form.budget}`,
       `Prenom : ${form.prenom}`, `Nom : ${form.nom}`,
       `Email : ${form.email}`, `Tel : ${form.telephone}`,
-      `Type : ${form.typeLogement}`, `Pieces : ${form.pieces}`,
-      `Ville : ${form.ville}`, `Situation : ${form.situation}`,
-      `Revenus : ${form.revenus}`, `Garant : ${form.garant}`,
-      form.message ? `\nSituation : ${form.message}` : "",
+      propertyInfo ? "" : `Type : ${form.typeLogement}`,
+      propertyInfo ? "" : `Pieces : ${form.pieces}`,
+      propertyInfo ? "" : `Ville : ${form.ville}`,
+      propertyInfo ? "" : `Situation : ${form.situation}`,
+      propertyInfo ? "" : `Revenus : ${form.revenus}`,
+      propertyInfo ? "" : `Garant : ${form.garant}`,
+      form.message ? `\nMessage : ${form.message}` : "",
     ].filter(Boolean).join("\n");
     window.open(getWhatsAppLink(`${intro}---\n${details}`), "_blank");
     setStep("success");
@@ -104,20 +107,24 @@ export default function ContactModal() {
               </div>
               <FInput label="Email" type="email" value={form.email} onChange={(v) => update("email", v)} required />
               <FInput label="Telephone" type="tel" value={form.telephone} onChange={(v) => update("telephone", v)} required />
-              <div className="grid grid-cols-2 gap-3">
-                <FSelect label="Type logement" value={form.typeLogement} onChange={(v) => update("typeLogement", v)} options={selectOptions.typeLogement} required />
-                <FSelect label="Pieces" value={form.pieces} onChange={(v) => update("pieces", v)} options={selectOptions.pieces} required />
-              </div>
-              <FInput label="Ville souhaitee" value={form.ville} onChange={(v) => update("ville", v)} required />
-              <FSelect label="Budget mensuel loyer" value={form.budget} onChange={(v) => update("budget", v)} options={selectOptions.budget} required />
-              <div className="grid grid-cols-2 gap-3">
-                <FSelect label="Situation" value={form.situation} onChange={(v) => update("situation", v)} options={selectOptions.situation} required />
-                <FSelect label="Revenus mensuels" value={form.revenus} onChange={(v) => update("revenus", v)} options={selectOptions.revenus} required />
-              </div>
-              <FSelect label="Avez-vous un garant ?" value={form.garant} onChange={(v) => update("garant", v)} options={selectOptions.garant} required />
+              {!propertyInfo && (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <FSelect label="Type logement" value={form.typeLogement} onChange={(v) => update("typeLogement", v)} options={selectOptions.typeLogement} required />
+                    <FSelect label="Pieces" value={form.pieces} onChange={(v) => update("pieces", v)} options={selectOptions.pieces} required />
+                  </div>
+                  <FInput label="Ville souhaitee" value={form.ville} onChange={(v) => update("ville", v)} required />
+                  <FSelect label="Budget mensuel loyer" value={form.budget} onChange={(v) => update("budget", v)} options={selectOptions.budget} required />
+                  <div className="grid grid-cols-2 gap-3">
+                    <FSelect label="Situation" value={form.situation} onChange={(v) => update("situation", v)} options={selectOptions.situation} required />
+                    <FSelect label="Revenus mensuels" value={form.revenus} onChange={(v) => update("revenus", v)} options={selectOptions.revenus} required />
+                  </div>
+                  <FSelect label="Avez-vous un garant ?" value={form.garant} onChange={(v) => update("garant", v)} options={selectOptions.garant} required />
+                </>
+              )}
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Votre situation (optionnel)</label>
-                <textarea value={form.message} onChange={(e) => update("message", e.target.value)} rows={2} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="Precisez si besoin..." />
+                <label className="block text-xs font-medium text-gray-700 mb-1">Message (optionnel)</label>
+                <textarea value={form.message} onChange={(e) => update("message", e.target.value)} rows={2} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="Votre message..." />
               </div>
               <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-500 hover:to-blue-700 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg">
                 {preselectedPlan ? "Envoyer ma demande →" : "Continuer →"}
