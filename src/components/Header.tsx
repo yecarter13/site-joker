@@ -11,7 +11,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image
@@ -21,13 +21,13 @@ export default function Header() {
             height={36}
             className="w-9 h-9 object-contain"
           />
-          <span className="font-bold text-xl text-white">Espace <span className="text-blue-400">Habitat</span></span>
+          <span className="font-bold text-xl text-gray-900">Espace <span className="text-blue-600">Habitat</span></span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="/catalog" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Logements</Link>
-          <Link href="/#tarifs" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Tarifs</Link>
-          <Link href="/#faq" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">FAQ</Link>
+          <Link href="/catalog" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Logements</Link>
+          <Link href="/#tarifs" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Tarifs</Link>
+          <Link href="/#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">FAQ</Link>
           <button
             onClick={() => openModal()}
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all shadow-lg cursor-pointer"
@@ -36,16 +36,16 @@ export default function Header() {
           </button>
         </nav>
 
-        <button className="md:hidden p-2 text-white" onClick={() => setOpen(!open)}>
+        <button className="md:hidden p-2 text-gray-700" onClick={() => setOpen(!open)}>
           {open ? <HiX size={24} /> : <HiMenu size={24} />}
         </button>
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-gray-800 bg-gray-900 px-4 py-4 space-y-3">
-          <Link href="/catalog" className="block text-sm font-medium text-gray-300 py-2 hover:text-white" onClick={() => setOpen(false)}>Logements</Link>
-          <Link href="/#tarifs" className="block text-sm font-medium text-gray-300 py-2 hover:text-white" onClick={() => setOpen(false)}>Tarifs</Link>
-          <Link href="/#faq" className="block text-sm font-medium text-gray-300 py-2 hover:text-white" onClick={() => setOpen(false)}>FAQ</Link>
+        <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-3">
+          <Link href="/catalog" className="block text-sm font-medium text-gray-600 py-2 hover:text-gray-900" onClick={() => setOpen(false)}>Logements</Link>
+          <Link href="/#tarifs" className="block text-sm font-medium text-gray-600 py-2 hover:text-gray-900" onClick={() => setOpen(false)}>Tarifs</Link>
+          <Link href="/#faq" className="block text-sm font-medium text-gray-600 py-2 hover:text-gray-900" onClick={() => setOpen(false)}>FAQ</Link>
           <button
             onClick={() => { openModal(); setOpen(false); }}
             className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-3 rounded-full text-sm font-semibold cursor-pointer w-full"
