@@ -4,6 +4,7 @@ import "./globals.css";
 import { ModalProvider } from "@/lib/ModalContext";
 import ContactModal from "@/components/ContactModal";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
+import FloatingSocialBubble from "@/components/FloatingSocialBubble";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
           {children}
           <ContactModal />
           <FloatingWhatsAppButton />
+          <FloatingSocialBubble />
         </ModalProvider>
       </body>
     </html>
