@@ -9,7 +9,7 @@ const steps = [
     desc: "Remplissez notre formulaire en ligne en 5 minutes : profil, projet logement, contraintes personnelles.",
     time: "5 minutes",
     icon: HiClipboardList,
-    color: "from-blue-500 to-blue-600",
+    color: "from-red-500 to-red-600",
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&q=80",
   },
   {
@@ -18,7 +18,7 @@ const steps = [
     desc: "Un conseiller humain examine votre profil, identifie les points forts à valoriser et les faiblesses à corriger.",
     time: "Sous 24h",
     icon: HiUserGroup,
-    color: "from-blue-600 to-blue-700",
+    color: "from-red-600 to-red-700",
     image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&q=80",
   },
   {
@@ -27,7 +27,7 @@ const steps = [
     desc: "Rapport complet, conseils sur mesure, documents à préparer : tout ce qu'il faut pour convaincre.",
     time: "Résultats concrets",
     icon: HiDocumentReport,
-    color: "from-blue-700 to-blue-800",
+    color: "from-red-700 to-red-800",
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&q=80",
   },
 ];
@@ -37,12 +37,12 @@ export default function MethodSection() {
     <section id="method" className="relative py-20 md:py-28 bg-gray-50 overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 bg-dots opacity-40" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-blue-100/30 to-blue-200/30 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-red-100/30 to-red-200/30 rounded-full blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-blue-100 rounded-full px-4 py-1.5 text-sm font-medium text-blue-600 mb-4">
-            <span className="w-2 h-2 bg-blue-500 rounded-full" />
+          <div className="inline-flex items-center gap-2 bg-red-100 rounded-full px-4 py-1.5 text-sm font-medium text-red-500 mb-4">
+            <span className="w-2 h-2 bg-red-500 rounded-full" />
             Notre méthode
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
@@ -58,8 +58,8 @@ export default function MethodSection() {
             <div key={step.number} className="group relative">
               {/* Connector line */}
               {i < 2 && (
-                <div className="hidden md:block absolute top-12 left-[60%] w-[40%] h-0.5 bg-gradient-to-r from-blue-200 to-blue-300 z-0">
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-blue-300 rounded-full" />
+                <div className="hidden md:block absolute top-12 left-[60%] w-[40%] h-0.5 bg-gradient-to-r from-red-200 to-red-300 z-0">
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-red-300 rounded-full" />
                 </div>
               )}
 

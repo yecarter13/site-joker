@@ -49,22 +49,22 @@ const testimonials = [
 
 const badgeColors: Record<string, string> = {
   Standard: "bg-gray-100 text-gray-600",
-  Prioritaire: "bg-blue-100 text-blue-700",
-  Premium: "bg-blue-50 text-blue-600",
+  Prioritaire: "bg-red-100 text-red-700",
+  Premium: "bg-red-50 text-red-500",
 };
 
 export default function TestimonialsSection() {
   return (
     <section className="relative py-20 md:py-28 bg-white overflow-hidden">
       {/* Background decor */}
-      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-blue-50/50 to-transparent" />
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-50 rounded-full blur-3xl" />
-      <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-50 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-red-50/50 to-transparent" />
+      <div className="absolute -top-20 -right-20 w-64 h-64 bg-red-50 rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-red-50 rounded-full blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-blue-50 rounded-full px-4 py-1.5 text-sm font-medium text-blue-600 mb-4">
-            <span className="w-2 h-2 bg-blue-500 rounded-full" />
+          <div className="inline-flex items-center gap-2 bg-red-50 rounded-full px-4 py-1.5 text-sm font-medium text-red-500 mb-4">
+            <span className="w-2 h-2 bg-red-500 rounded-full" />
             Avis vérifiés
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
@@ -82,10 +82,10 @@ export default function TestimonialsSection() {
               className="group relative bg-white rounded-3xl p-6 border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
             >
               {/* Decorative gradient dot */}
-              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-bl-3xl -z-10" />
+              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-bl-3xl -z-10" />
 
               {/* Quote mark */}
-              <div className="text-4xl leading-none text-blue-200 mb-2">&ldquo;</div>
+              <div className="text-4xl leading-none text-red-200 mb-2">&ldquo;</div>
 
               <p className="text-sm text-gray-700 leading-relaxed mb-5 line-clamp-4">
                 {t.text}
@@ -100,7 +100,7 @@ export default function TestimonialsSection() {
                   <div className="text-xs text-gray-500 truncate">{t.role}</div>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <HiCheckCircle className="text-blue-500 text-sm" />
+                  <HiCheckCircle className="text-red-500 text-sm" />
                   <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${badgeColors[t.badge] || badgeColors.Standard}`}>
                     {t.badge}
                   </span>

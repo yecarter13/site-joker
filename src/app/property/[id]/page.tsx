@@ -268,7 +268,7 @@ export default function PropertyDetailPage() {
             {/* CTA candidature */}
             <button
               onClick={() => openModal(`${property.title} - ${property.city} (Réf: ${property.reference})`)}
-              className="mt-4 w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-500 hover:to-blue-700 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg cursor-pointer"
+              className="mt-4 w-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-400 hover:to-red-600 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg cursor-pointer"
             >
               Déposer candidature
             </button>
