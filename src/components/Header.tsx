@@ -19,7 +19,7 @@ export default function Header() {
             alt="Espace Habitat"
             width={36}
             height={36}
-            className="w-9 h-9 object-contain"
+            className="w-12 h-12 object-contain"
           />
           <span className="font-bold text-xl text-gray-900">Espace <span className="text-red-500">Habitat</span></span>
         </Link>

@@ -83,10 +83,10 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="sticky bottom-0 z-40 bg-gradient-to-r from-blue-600 to-blue-500 md:hidden">
+      <div className="sticky bottom-0 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden px-4 py-3">
         <button
           onClick={() => openModal()}
-          className="w-full text-white py-3.5 px-4 text-sm font-bold cursor-pointer"
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3.5 px-4 rounded-xl text-sm font-bold shadow-lg active:scale-[0.97] transition-all cursor-pointer"
         >
           Suivre mon dossier
         </button>
