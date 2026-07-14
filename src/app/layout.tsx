@@ -21,7 +21,7 @@ import { SITE_NAME } from "@/lib/constants";
 export const metadata: Metadata = {
   title: `${SITE_NAME} - Votre dossier, votre meilleure chance de louer`,
   description: `Optimisez votre dossier de location avec ${SITE_NAME}. Accompagnement personnalisé pour maximiser vos chances d'être accepté.`,
-  icons: { icon: "/logo.jpeg" },
+  icons: { icon: "/logo.png" },
 };
 
 export default function RootLayout({

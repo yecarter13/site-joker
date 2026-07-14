@@ -33,7 +33,7 @@ export default function LouerSection() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-            Louer avec <span className="text-blue-600">Espace Habitat</span>
+            Louer avec <span className="text-red-500">Espace Habitat</span>
           </h2>
           <p className="text-gray-500 mt-2 max-w-xl mx-auto">
             Trouvez le logement qui vous correspond parmi nos offres.
@@ -45,10 +45,10 @@ export default function LouerSection() {
             return (
               <div
                 key={item.title}
-                className="group bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all"
+                className="group bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-red-200 hover:shadow-lg transition-all"
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-blue-200 transition-colors">
-                  <Icon className="text-blue-600 text-xl" />
+                <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-red-200 transition-colors">
+                  <Icon className="text-red-500 text-xl" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
                   {item.title}
@@ -58,7 +58,7 @@ export default function LouerSection() {
                 </p>
                 <Link
                   href={item.link}
-                  className="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm group/btn hover:text-blue-700 transition-colors"
+                  className="inline-flex items-center gap-2 text-red-500 font-semibold text-sm group/btn hover:text-red-600 transition-colors"
                 >
                   {item.label}
                   <FaArrowRight className="text-[10px] group-hover/btn:translate-x-0.5 transition-transform" />

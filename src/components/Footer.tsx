@@ -15,8 +15,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Image src="/logo.jpeg" alt={SITE_NAME} width={36} height={36} className="w-9 h-9 object-contain" />
-              <span className="font-bold text-xl text-gray-900">Espace <span className="text-blue-600">Habitat</span></span>
+              <Image src="/logo.png" alt={SITE_NAME} width={36} height={36} className="w-9 h-9 object-contain" />
+              <span className="font-bold text-xl text-gray-900">Espace <span className="text-red-500">Habitat</span></span>
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">
               Votre partenaire de confiance pour l&apos;optimisation de dossier locatif et l&apos;attribution de logement HLM.
@@ -25,20 +25,20 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-gray-900 mb-4">Liens rapides</h3>
             <div className="space-y-2.5 text-sm">
-              <Link href="/#method" className="flex items-center gap-1 group hover:text-blue-600 transition-colors">
-                <FaArrowRight className="text-[10px] text-blue-500 group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/#method" className="flex items-center gap-1 group hover:text-red-500 transition-colors">
+                <FaArrowRight className="text-[10px] text-red-500 group-hover:translate-x-0.5 transition-transform" />
                 Comment ça marche
               </Link>
-              <Link href="/#tarifs" className="flex items-center gap-1 group hover:text-blue-600 transition-colors">
-                <FaArrowRight className="text-[10px] text-blue-500 group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/#tarifs" className="flex items-center gap-1 group hover:text-red-500 transition-colors">
+                <FaArrowRight className="text-[10px] text-red-500 group-hover:translate-x-0.5 transition-transform" />
                 Nos tarifs
               </Link>
-              <Link href="/#faq" className="flex items-center gap-1 group hover:text-blue-600 transition-colors">
-                <FaArrowRight className="text-[10px] text-blue-500 group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/#faq" className="flex items-center gap-1 group hover:text-red-500 transition-colors">
+                <FaArrowRight className="text-[10px] text-red-500 group-hover:translate-x-0.5 transition-transform" />
                 FAQ
               </Link>
-              <Link href="/catalog" className="flex items-center gap-1 group hover:text-blue-600 transition-colors">
-                <FaArrowRight className="text-[10px] text-blue-500 group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/catalog" className="flex items-center gap-1 group hover:text-red-500 transition-colors">
+                <FaArrowRight className="text-[10px] text-red-500 group-hover:translate-x-0.5 transition-transform" />
                 Logements disponibles
               </Link>
             </div>
@@ -47,7 +47,7 @@ export default function Footer() {
             <h3 className="font-semibold text-gray-900 mb-4">Contact</h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-start gap-2">
-                <FaMapMarkerAlt className="text-blue-500 mt-0.5 flex-shrink-0" />
+                <FaMapMarkerAlt className="text-red-500 mt-0.5 flex-shrink-0" />
                 <span>
                   {ADDRESS}<br />
                   {POSTAL_CODE}, {CITY}<br />
