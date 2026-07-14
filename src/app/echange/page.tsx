@@ -17,6 +17,8 @@ export default function EchangePage() {
     adresse: "",
     nomPrenom: "",
     numeroUnique: "",
+    email: "",
+    departementRecherche: "",
     criteres: "",
   });
 
@@ -26,7 +28,7 @@ export default function EchangePage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.ville || !form.departement || !form.adresse || !form.nomPrenom || !form.numeroUnique || !form.criteres) return;
+    if (!form.ville || !form.departement || !form.adresse || !form.nomPrenom || !form.numeroUnique || !form.email || !form.departementRecherche || !form.criteres) return;
 
     const details = [
       `Ville : ${form.ville}`,
@@ -34,6 +36,8 @@ export default function EchangePage() {
       `Adresse du logement actuel : ${form.adresse}`,
       `Nom et prénom : ${form.nomPrenom}`,
       `Numéro unique : ${form.numeroUnique}`,
+      `E-mail : ${form.email}`,
+      `Département de recherche : ${form.departementRecherche}`,
       `Critères de recherche : ${form.criteres}`,
     ].filter(Boolean).join("\n");
 
@@ -45,7 +49,7 @@ export default function EchangePage() {
   function handleClose() {
     setShowModal(false);
     setSubmitted(false);
-    setForm({ ville: "", departement: "", adresse: "", nomPrenom: "", numeroUnique: "", criteres: "" });
+    setForm({ ville: "", departement: "", adresse: "", nomPrenom: "", numeroUnique: "", email: "", departementRecherche: "", criteres: "" });
   }
 
   return (
@@ -126,9 +130,11 @@ export default function EchangePage() {
                 <FInput label="Adresse du logement actuel" value={form.adresse} onChange={(v) => update("adresse", v)} required />
                 <FInput label="Nom et prénom" value={form.nomPrenom} onChange={(v) => update("nomPrenom", v)} required />
                 <FInput label="Numéro unique" value={form.numeroUnique} onChange={(v) => update("numeroUnique", v)} required />
+                <FInput label="E-mail" type="email" value={form.email} onChange={(v) => update("email", v)} required />
+                <FInput label="Département de recherche" value={form.departementRecherche} onChange={(v) => update("departementRecherche", v)} required />
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Critère de recherche pour le logement souhaité <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Critères de recherche de logement actuel <span className="text-red-400">*</span></label>
                   <textarea value={form.criteres} onChange={(e) => update("criteres", e.target.value)} rows={3} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 outline-none resize-none" placeholder="Décrivez le logement recherché (ville, surface, pièces, étage, etc.)" required />
                 </div>
 
