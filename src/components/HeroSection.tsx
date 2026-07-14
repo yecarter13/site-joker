@@ -32,13 +32,13 @@ export default function HeroSection() {
         </div>
 
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-red-50 rounded-full px-3.5 py-1.5 text-xs md:text-sm mb-5">
-            <HiDocumentText className="text-red-500" />
-            <span className="text-red-700">+800 dossiers accompagnés</span>
+          <div className="inline-flex items-center gap-2 bg-blue-50 rounded-full px-3.5 py-1.5 text-xs md:text-sm mb-5">
+            <HiDocumentText className="text-blue-500" />
+            <span className="text-blue-700">+800 dossiers accompagnés</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-4">
-            Trouvez un logement en toute sérénité avec <span className="text-red-500">Espace Habitat</span>.
+            Trouvez un logement en toute sérénité avec <span className="text-blue-600">Espace Habitat</span>.
           </h1>
 
           <p className="text-sm md:text-base text-gray-600 mb-4 leading-relaxed max-w-2xl mx-auto">
@@ -52,7 +52,7 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-3 mb-6 justify-center">
             <button
               onClick={() => openModal()}
-              className="group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white px-6 py-3.5 rounded-full text-base font-bold transition-all shadow-xl shadow-red-500/30 hover:shadow-red-500/50 active:scale-[0.97] cursor-pointer"
+              className="group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white px-6 py-3.5 rounded-full text-base font-bold transition-all shadow-xl shadow-blue-500/30 hover:shadow-blue-500/50 active:scale-[0.97] cursor-pointer"
             >
               Commencez votre accompagnement dès aujourd&apos;hui
               <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
@@ -74,8 +74,8 @@ export default function HeroSection() {
               { value: "24h", label: "Délai de réponse moyen" },
               { value: "30j", label: "Garantie remboursée" },
             ].map((stat) => (
-              <div key={stat.label} className="bg-red-50 rounded-xl p-3.5 md:p-4 text-center">
-                <div className="text-xl md:text-3xl font-extrabold text-red-500">{stat.value}</div>
+              <div key={stat.label} className="bg-blue-50 rounded-xl p-3.5 md:p-4 text-center">
+                <div className="text-xl md:text-3xl font-extrabold text-blue-600">{stat.value}</div>
                 <div className="text-[11px] md:text-sm text-gray-500 mt-0.5">{stat.label}</div>
               </div>
             ))}
@@ -83,7 +83,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="sticky bottom-0 z-40 bg-gradient-to-r from-red-500 to-red-600 md:hidden">
+      <div className="sticky bottom-0 z-40 bg-gradient-to-r from-blue-600 to-blue-500 md:hidden">
         <button
           onClick={() => openModal()}
           className="w-full text-white py-3.5 px-4 text-sm font-bold cursor-pointer"

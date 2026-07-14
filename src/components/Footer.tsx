@@ -15,7 +15,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Image src="/logo.png" alt={SITE_NAME} width={48} height={48} className="w-12 h-12 object-contain" />
+              <Image src="/logo.png" alt={SITE_NAME} width={36} height={36} className="w-9 h-9 object-contain" />
               <span className="font-bold text-xl text-gray-900">Espace <span className="text-red-500">Habitat</span></span>
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">

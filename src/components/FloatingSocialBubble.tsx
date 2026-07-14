@@ -26,7 +26,7 @@ export default function FloatingSocialBubble() {
             href={FACEBOOK_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-12 h-12 bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+            className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
             title="Facebook"
           >
             <FaFacebook size={20} />
@@ -35,7 +35,7 @@ export default function FloatingSocialBubble() {
       )}
       <button
         onClick={() => setOpen(!open)}
-        className="w-14 h-14 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-all cursor-pointer"
+        className="w-14 h-14 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 transition-all cursor-pointer"
         title="Réseaux sociaux"
       >
         <FaShareAlt size={20} className={open ? "" : "ml-1"} />

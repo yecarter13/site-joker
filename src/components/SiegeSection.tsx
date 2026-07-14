@@ -30,7 +30,7 @@ export default function SiegeSection() {
     <section className="relative py-16 md:py-24 bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
         <h2 className="text-3xl md:text-4xl font-extrabold text-white">
-          Nos <span className="text-red-400">sièges</span>
+          Nos <span className="text-blue-400">sièges</span>
         </h2>
         <p className="text-gray-400 mt-2">Découvrez nos différents espaces</p>
       </div>
@@ -71,7 +71,7 @@ export default function SiegeSection() {
               key={i}
               onClick={() => setCurrent(i)}
               className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
-                i === current ? "bg-red-400 w-6" : "bg-gray-600 hover:bg-gray-500"
+                i === current ? "bg-blue-400 w-6" : "bg-gray-600 hover:bg-gray-500"
               }`}
             />
           ))}

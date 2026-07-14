@@ -17,7 +17,7 @@ export default function PartenairesSection() {
     <section className="py-16 md:py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-          Nos <span className="text-red-500">partenaires</span>
+          Nos <span className="text-blue-600">partenaires</span>
         </h2>
         <p className="text-gray-500 mt-2">Ils nous font confiance</p>
       </div>
