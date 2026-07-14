@@ -1,7 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -34,7 +33,6 @@ const MIN_PRICE = 0;
 const MAX_PRICE = 3000;
 
 function CatalogContent() {
-  const searchParams = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +52,6 @@ function CatalogContent() {
   const [typeAppart, setTypeAppart] = useState(false);
   const [typeMaison, setTypeMaison] = useState(false);
   const [sort, setSort] = useState<SortKey>("price-asc");
-  const [filter, setFilter] = useState(searchParams.get("filter") || "");
 
   useEffect(() => {
     fetch(`/api/properties?status=Disponible`)
@@ -66,23 +63,18 @@ function CatalogContent() {
       .catch(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    setFilter(searchParams.get("filter") || "");
-  }, [searchParams]);
-
   // Compute actual min/max from data
   const dataMinPrice = useMemo(() => properties.length ? Math.min(...properties.map((p) => p.price)) : MIN_PRICE, [properties]);
   const dataMaxPrice = useMemo(() => properties.length ? Math.max(...properties.map((p) => p.price)) : MAX_PRICE, [properties]);
 
   const filtered = useMemo(() => {
     let result = [...properties];
+    result = result.filter((p) => p.offreDuMoment);
     if (city) result = result.filter((p) => p.city.toLowerCase().includes(city.toLowerCase()));
     result = result.filter((p) => p.price >= minPrice && p.price <= maxPrice);
     if (rooms) result = result.filter((p) => p.rooms >= parseInt(rooms));
     if (typeAppart && !typeMaison) result = result.filter((p) => p.type?.toLowerCase().includes("appart") || p.rooms <= 4);
     if (typeMaison && !typeAppart) result = result.filter((p) => p.type?.toLowerCase().includes("maison") || p.rooms >= 3);
-    if (filter === "offreDuMoment") result = result.filter((p) => p.offreDuMoment);
-    if (filter === "premium") result = result.filter((p) => p.premium);
 
     result.sort((a, b) => {
       switch (sort) {
@@ -97,7 +89,7 @@ function CatalogContent() {
     });
 
     return result;
-  }, [city, minPrice, maxPrice, rooms, typeAppart, typeMaison, sort, filter, properties]);
+  }, [city, minPrice, maxPrice, rooms, typeAppart, typeMaison, sort, properties]);
 
   const cities = useMemo(() => [...new Set(properties.map((p) => p.city))].sort(), [properties]);
 
@@ -123,7 +115,6 @@ function CatalogContent() {
     setRooms("");
     setTypeAppart(false);
     setTypeMaison(false);
-    setFilter("");
   }
 
   // Slider percentage helpers
@@ -333,13 +324,5 @@ function CatalogContent() {
 }
 
 export default function CatalogPage() {
-  return (
-    <Suspense fallback={
-      <main className="flex-1 bg-gray-50 min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500" />
-      </main>
-    }>
-      <CatalogContent />
-    </Suspense>
-  );
+  return <CatalogContent />;
 }

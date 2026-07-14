@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { FaArrowRight, FaFire, FaHome, FaStar } from "react-icons/fa";
+import { FaArrowRight, FaHome, FaStar, FaExchangeAlt } from "react-icons/fa";
 
 const items = [
   {
-    icon: FaFire,
-    title: "L'offre du moment",
-    desc: "Profitez de nos offres exclusives sur les logements disponibles.",
-    link: "/catalog?filter=offreDuMoment",
-    label: "Voir l'offre",
+    icon: FaExchangeAlt,
+    title: "Échange de logement",
+    desc: "Vous êtes locataire HLM ? Échangez votre logement avec un autre locataire.",
+    link: "/echange",
+    label: "Commencer",
   },
   {
     icon: FaHome,

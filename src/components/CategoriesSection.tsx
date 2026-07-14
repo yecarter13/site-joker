@@ -1,19 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { HiFire, HiHome, HiStar } from "react-icons/hi";
+import { HiHome, HiStar, HiSwitchHorizontal } from "react-icons/hi";
 
 const categories = [
   {
-    href: "/catalog?filter=offreDuMoment",
-    label: "L'offre du moment",
-    description: "Découvrez nos meilleures offres sélectionnées pour vous",
-    icon: HiFire,
+    href: "/echange",
+    label: "Échange de logement",
+    description: "Trouvez un échange de HLM en quelques clics",
+    icon: HiSwitchHorizontal,
     bg: "from-blue-600 to-blue-400",
     shadow: "shadow-blue-500/30",
   },
   {
-    href: "/catalog?status=Disponible",
+    href: "/catalog",
     label: "Logement disponible",
     description: "Consultez tous nos logements disponibles immédiatement",
     icon: HiHome,
