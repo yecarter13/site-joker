@@ -9,24 +9,24 @@ const categories = [
     label: "Échange de logement",
     description: "Trouvez un échange de HLM en quelques clics",
     icon: HiSwitchHorizontal,
-    bg: "from-red-600 to-red-400",
-    shadow: "shadow-red-500/30",
+    bg: "bg-blue-600",
+    shadow: "shadow-blue-600/30",
   },
   {
     href: "/catalog",
     label: "Logement disponible",
     description: "Consultez tous nos logements disponibles immédiatement",
     icon: HiHome,
-    bg: "from-red-500 to-red-300",
-    shadow: "shadow-red-500/30",
+    bg: "bg-blue-600",
+    shadow: "shadow-blue-600/30",
   },
   {
     href: "/catalog?filter=premium",
     label: "Location appartement premium",
     description: "Des logements haut de gamme",
     icon: HiStar,
-    bg: "from-red-800 to-red-600",
-    shadow: "shadow-red-800/30",
+    bg: "bg-blue-600",
+    shadow: "shadow-blue-600/30",
   },
 ];
 
@@ -39,7 +39,7 @@ export default function CategoriesSection() {
             <Link
               key={cat.href}
               href={cat.href}
-              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${cat.bg} p-5 md:p-6 text-white shadow-lg ${cat.shadow} hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]`}
+              className={`group relative overflow-hidden rounded-2xl ${cat.bg} p-5 md:p-6 text-white shadow-lg ${cat.shadow} hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]`}
             >
               <div className="relative z-10">
                 <cat.icon className="text-2xl md:text-3xl mb-3 opacity-90" />

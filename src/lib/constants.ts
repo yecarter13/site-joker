@@ -4,5 +4,5 @@ export const ADDRESS = "12 RUE DE L'EUROPE";
 export const POSTAL_CODE = "08170";
 export const CITY = "FUMAY";
 export const COUNTRY = "FRANCE";
-export const WHATSAPP_NUMBER = "33758134795";
+export const WHATSAPP_NUMBER = "33753045362";
 export const EMAIL = "contact@espace-habitat.fr";

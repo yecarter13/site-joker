@@ -17,25 +17,11 @@ export default function EchangePage() {
     adresse: "",
     nomPrenom: "",
     numeroUnique: "",
-    photo: null as File | null,
     criteres: "",
   });
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   function update(field: string, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
-  }
-
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0] || null;
-    setForm((prev) => ({ ...prev, photo: file }));
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setPhotoPreview(reader.result as string);
-      reader.readAsDataURL(file);
-    } else {
-      setPhotoPreview(null);
-    }
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -49,7 +35,6 @@ export default function EchangePage() {
       `Nom et prénom : ${form.nomPrenom}`,
       `Numéro unique : ${form.numeroUnique}`,
       `Critères de recherche : ${form.criteres}`,
-      form.photo ? `\n(Photo jointe : ${form.photo.name})` : "",
     ].filter(Boolean).join("\n");
 
     const message = `Bonjour, je souhaite proposer un échange de logement HLM.\n\n---\n${details}`;
@@ -60,8 +45,7 @@ export default function EchangePage() {
   function handleClose() {
     setShowModal(false);
     setSubmitted(false);
-    setForm({ ville: "", departement: "", adresse: "", nomPrenom: "", numeroUnique: "", photo: null, criteres: "" });
-    setPhotoPreview(null);
+    setForm({ ville: "", departement: "", adresse: "", nomPrenom: "", numeroUnique: "", criteres: "" });
   }
 
   return (
@@ -94,9 +78,9 @@ export default function EchangePage() {
               conditions du bailleur.
             </p>
 
-            <div className="bg-red-50 rounded-xl p-4 md:p-6 mb-8">
+            <div className="bg-blue-50 rounded-xl p-4 md:p-6 mb-8">
               <div className="flex items-start gap-3">
-                <FaCheck className="text-red-500 mt-0.5 flex-shrink-0" />
+                <FaCheck className="text-blue-500 mt-0.5 flex-shrink-0" />
                 <p className="text-sm text-gray-700">
                   <strong>Une solution simple</strong> pour trouver un logement plus adapté à vos besoins.
                 </p>
@@ -105,7 +89,7 @@ export default function EchangePage() {
 
             <button
               onClick={() => setShowModal(true)}
-              className="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg cursor-pointer"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg cursor-pointer"
             >
               Commencer
             </button>
@@ -133,7 +117,7 @@ export default function EchangePage() {
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Message envoyé !</h3>
                 <p className="text-sm text-gray-500 mb-6">Redirection vers WhatsApp...</p>
-                <button onClick={handleClose} className="text-red-500 font-semibold text-sm hover:underline cursor-pointer">Fermer</button>
+                <button onClick={handleClose} className="text-blue-600 font-semibold text-sm hover:underline cursor-pointer">Fermer</button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="overflow-y-auto flex-1 px-4 py-4 space-y-3">
@@ -144,24 +128,11 @@ export default function EchangePage() {
                 <FInput label="Numéro unique" value={form.numeroUnique} onChange={(v) => update("numeroUnique", v)} required />
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Photo du logement actuel</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-red-600 hover:file:bg-red-100 cursor-pointer"
-                  />
-                  {photoPreview && (
-                    <img src={photoPreview} alt="Aperçu" className="mt-2 w-32 h-24 object-cover rounded-lg border border-gray-200" />
-                  )}
-                </div>
-
-                <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">Critère de recherche pour le logement souhaité <span className="text-red-400">*</span></label>
-                  <textarea value={form.criteres} onChange={(e) => update("criteres", e.target.value)} rows={3} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-red-400 outline-none resize-none" placeholder="Décrivez le logement recherché (ville, surface, pièces, étage, etc.)" required />
+                  <textarea value={form.criteres} onChange={(e) => update("criteres", e.target.value)} rows={3} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 outline-none resize-none" placeholder="Décrivez le logement recherché (ville, surface, pièces, étage, etc.)" required />
                 </div>
 
-                <button type="submit" className="w-full bg-red-500 hover:bg-red-600 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg cursor-pointer">
+                <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg cursor-pointer">
                   Envoyer ma demande →
                 </button>
                 <p className="text-[10px] text-gray-400 text-center">En cliquant, vous acceptez d&apos;être contacté par nos services.</p>
@@ -180,7 +151,7 @@ function FInput({ label, value, onChange, type = "text", required }: {
   return (
     <div>
       <label className="block text-xs font-medium text-gray-700 mb-1">{label} <span className="text-red-400">*</span></label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-red-400 outline-none" />
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 outline-none" />
     </div>
   );
 }
