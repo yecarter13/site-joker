@@ -27,7 +27,8 @@ export default function ContactModal() {
   const [form, setForm] = useState({
     prenom: "", nom: "", email: "", telephone: "", budget: "",
     typeLogement: "", pieces: "", ville: "", situation: "",
-    revenus: "", garant: "", message: "",
+    revenus: "", garant: "", message: "", numeroUnique: "",
+    departementRecherche: "",
   });
   const [selectedPlan, setSelectedPlan] = useState<string | null>(preselectedPlan || null);
 
@@ -62,13 +63,15 @@ export default function ContactModal() {
       propertyInfo ? "" : `Budget loyer : ${form.budget}`,
       `Prenom : ${form.prenom}`, `Nom : ${form.nom}`,
       `Email : ${form.email}`, `Tel : ${form.telephone}`,
+      propertyInfo ? `Numéro unique : ${form.numeroUnique}` : "",
+      propertyInfo ? `Département de recherche : ${form.departementRecherche}` : "",
       propertyInfo ? "" : `Type : ${form.typeLogement}`,
       propertyInfo ? "" : `Pieces : ${form.pieces}`,
       propertyInfo ? "" : `Ville : ${form.ville}`,
       propertyInfo ? "" : `Situation : ${form.situation}`,
       propertyInfo ? "" : `Revenus : ${form.revenus}`,
       propertyInfo ? "" : `Garant : ${form.garant}`,
-      form.message ? `\nMessage : ${form.message}` : "",
+      propertyInfo ? `Critères de recherche : ${form.message}` : (form.message ? `\nMessage : ${form.message}` : ""),
     ].filter(Boolean).join("\n");
     window.open(getWhatsAppLink(`${intro}---\n${details}`), "_blank");
     setStep("success");
@@ -78,7 +81,7 @@ export default function ContactModal() {
     closeModal();
     setStep("form");
     setSelectedPlan(preselectedPlan || null);
-    setForm({ prenom: "", nom: "", email: "", telephone: "", budget: "", typeLogement: "", pieces: "", ville: "", situation: "", revenus: "", garant: "", message: "" });
+    setForm({ prenom: "", nom: "", email: "", telephone: "", budget: "", typeLogement: "", pieces: "", ville: "", situation: "", revenus: "", garant: "", message: "", numeroUnique: "", departementRecherche: "" });
   }
 
   function goBack() {
@@ -107,6 +110,12 @@ export default function ContactModal() {
               </div>
               <FInput label="Email" type="email" value={form.email} onChange={(v) => update("email", v)} required />
               <FInput label="Telephone" type="tel" value={form.telephone} onChange={(v) => update("telephone", v)} required />
+              {propertyInfo && (
+                <>
+                  <FInput label="Numéro unique" value={form.numeroUnique} onChange={(v) => update("numeroUnique", v)} required />
+                  <FInput label="Département de recherche" value={form.departementRecherche} onChange={(v) => update("departementRecherche", v)} required />
+                </>
+              )}
               {!propertyInfo && (
                 <>
                   <div className="grid grid-cols-2 gap-3">
@@ -123,8 +132,8 @@ export default function ContactModal() {
                 </>
               )}
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Message (optionnel)</label>
-                <textarea value={form.message} onChange={(e) => update("message", e.target.value)} rows={2} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="Votre message..." />
+                <label className="block text-xs font-medium text-gray-700 mb-1">{propertyInfo ? "Critères de recherche de logement actuel" : "Message (optionnel)"} {propertyInfo ? <span className="text-red-400">*</span> : ""}</label>
+                <textarea value={form.message} onChange={(e) => update("message", e.target.value)} rows={2} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder={propertyInfo ? "Décrivez votre logement actuel..." : "Votre message..."} required={!!propertyInfo} />
               </div>
               <button type="submit" className="w-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-400 hover:to-red-600 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg">
                 {preselectedPlan ? "Envoyer ma demande →" : "Continuer →"}
