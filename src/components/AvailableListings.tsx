@@ -119,7 +119,6 @@ export default function AvailableListings() {
             className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
           >
             <option value="">Type</option>
-            <option value="Prive">Prive</option>
             <option value="HLM">HLM</option>
           </select>
           {(city || maxPrice || type) && (

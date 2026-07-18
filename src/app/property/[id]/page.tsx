@@ -172,9 +172,11 @@ export default function PropertyDetailPage() {
                   </span>
                 )}
               </div>
-              <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-bold text-gray-700 shadow-lg">
-                {property.type}
-              </div>
+              {property.type === "HLM" && (
+                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-bold text-emerald-700 shadow-lg">
+                  HLM
+                </div>
+              )}
             </div>
             {images.length > 1 && (
               <div className="flex gap-2 p-3 overflow-x-auto scrollbar-hide">

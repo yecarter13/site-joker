@@ -195,9 +195,9 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
           </div>
           <div className="space-y-1">
             <label className="block text-sm font-medium text-gray-700">Type</label>
-            <select name="type" defaultValue={initial?.type || "Prive"} className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
-              <option value="Prive">Prive</option>
+            <select name="type" defaultValue={initial?.type || "HLM"} className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
               <option value="HLM">HLM</option>
+              <option value="Prive">Prive</option>
             </select>
           </div>
         </div>

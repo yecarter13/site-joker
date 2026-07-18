@@ -69,7 +69,7 @@ function CatalogContent() {
 
   const filtered = useMemo(() => {
     let result = [...properties];
-    result = result.filter((p) => p.offreDuMoment);
+    result = result.filter((p) => p.offreDuMoment && p.type === "HLM");
     if (city) result = result.filter((p) => p.city.toLowerCase().includes(city.toLowerCase()));
     result = result.filter((p) => p.price >= minPrice && p.price <= maxPrice);
     if (rooms) result = result.filter((p) => p.rooms >= parseInt(rooms));
