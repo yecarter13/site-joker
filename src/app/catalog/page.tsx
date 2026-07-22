@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
@@ -33,6 +34,9 @@ const MIN_PRICE = 0;
 const MAX_PRICE = 3000;
 
 function CatalogContent() {
+  const searchParams = useSearchParams();
+  const filter = searchParams.get("filter");
+
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -69,7 +73,11 @@ function CatalogContent() {
 
   const filtered = useMemo(() => {
     let result = [...properties];
-    result = result.filter((p) => p.offreDuMoment && p.type === "HLM");
+    if (filter === "premium") {
+      result = result.filter((p) => p.premium);
+    } else {
+      result = result.filter((p) => p.offreDuMoment && p.type === "HLM");
+    }
     if (city) result = result.filter((p) => p.city.toLowerCase().includes(city.toLowerCase()));
     result = result.filter((p) => p.price >= minPrice && p.price <= maxPrice);
     if (rooms) result = result.filter((p) => p.rooms >= parseInt(rooms));
@@ -89,7 +97,7 @@ function CatalogContent() {
     });
 
     return result;
-  }, [city, minPrice, maxPrice, rooms, typeAppart, typeMaison, sort, properties]);
+  }, [city, minPrice, maxPrice, rooms, typeAppart, typeMaison, sort, filter, properties]);
 
   const cities = useMemo(() => [...new Set(properties.map((p) => p.city))].sort(), [properties]);
 
@@ -324,5 +332,9 @@ function CatalogContent() {
 }
 
 export default function CatalogPage() {
-  return <CatalogContent />;
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500" /></div>}>
+      <CatalogContent />
+    </Suspense>
+  );
 }
