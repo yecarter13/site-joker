@@ -76,7 +76,7 @@ function CatalogContent() {
     if (filter === "premium") {
       result = result.filter((p) => p.premium);
     } else {
-      result = result.filter((p) => p.offreDuMoment && p.type === "HLM");
+      result = result.filter((p) => p.offreDuMoment);
     }
     if (city) result = result.filter((p) => p.city.toLowerCase().includes(city.toLowerCase()));
     result = result.filter((p) => p.price >= minPrice && p.price <= maxPrice);
