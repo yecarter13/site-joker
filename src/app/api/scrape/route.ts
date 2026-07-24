@@ -95,6 +95,24 @@ function parseListing(html: string, index: number) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    const mode = searchParams.get("mode");
+
+    // Fix mode: clean up address field for CDC imports
+    if (mode === "fix-address") {
+      const all = await prisma.property.findMany({
+        where: { reference: { contains: "CDC-" } },
+        select: { id: true, address: true },
+      });
+      let fixed = 0;
+      for (const p of all) {
+        if (p.address && p.address.includes("cdc-habitat.fr")) {
+          await prisma.property.update({ where: { id: p.id }, data: { address: null } });
+          fixed++;
+        }
+      }
+      return NextResponse.json({ success: true, fixed });
+    }
+
     const url = searchParams.get("url") || "https://www.cdc-habitat.fr/recherche/vivelli";
     const baseUrl = url.split("?")[0];
 
@@ -136,7 +154,7 @@ export async function GET(request: Request) {
             floor: p.floorNum,
             city: p.city,
             district: p.district,
-            address: p.fullUrl,
+            address: null,
             type: p.type,
             status: "Disponible",
             images: JSON.stringify(p.images),

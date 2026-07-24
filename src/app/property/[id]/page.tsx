@@ -149,7 +149,7 @@ export default function PropertyDetailPage() {
           {/* Image gallery */}
           <div className="relative rounded-2xl overflow-hidden bg-white mb-4 md:mb-6">
             <div className="relative aspect-[4/3] md:aspect-[16/9]">
-              <img src={images[currentImage]} alt={property.title} className="w-full h-full object-cover" />
+              <img src={images[currentImage]} alt={property.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
               <div className="absolute top-3 left-3 flex flex-wrap gap-2">
                 <span className={`px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-lg ${
                   property.status === "Disponible" ? "bg-green-500" : "bg-red-500"
@@ -188,7 +188,7 @@ export default function PropertyDetailPage() {
                       i === currentImage ? "border-indigo-500 opacity-100 ring-1 ring-indigo-300" : "border-transparent opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={img} alt="" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

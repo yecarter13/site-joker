@@ -194,7 +194,7 @@ async function main() {
         floor: p.floorNum,
         city: p.city,
         district: p.district,
-        address: p.fullUrl,
+        address: null,
         type: p.type,
         status: "Disponible",
         images: JSON.stringify(p.images.slice(0, 10)),
