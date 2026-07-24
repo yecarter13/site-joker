@@ -11,7 +11,9 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "vercel-build": "prisma generate && prisma db push && next build"
+    "vercel-build": "prisma generate && prisma db push && next build",
+    "scrape": "node scripts/scrape-cdc.js",
+    "scrape:force": "node scripts/scrape-cdc.js --force"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -24,6 +26,7 @@
     "@types/uuid": "^10.0.0",
     "@vercel/blob": "^2.5.0",
     "bcryptjs": "^3.0.3",
+    "cheerio": "^1.2.0",
     "leaflet": "^1.9.4",
     "next": "16.2.9",
     "prisma": "^5.22.0",
@@ -31,6 +34,7 @@
     "react-dom": "19.2.4",
     "react-icons": "^5.6.0",
     "react-leaflet": "^5.0.0",
+    "undici": "^7.28.0",
     "uuid": "^14.0.0"
   },
   "devDependencies": {
