@@ -113,6 +113,21 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, fixed });
     }
 
+    // Delete mode: remove all CDC-imported properties
+    if (mode === "delete") {
+      const cdc = await prisma.property.findMany({
+        where: { reference: { contains: "CDC-" } },
+        select: { id: true, title: true },
+      });
+      if (cdc.length === 0) {
+        return NextResponse.json({ success: true, deleted: 0 });
+      }
+      await prisma.property.deleteMany({
+        where: { reference: { contains: "CDC-" } },
+      });
+      return NextResponse.json({ success: true, deleted: cdc.length });
+    }
+
     const url = searchParams.get("url") || "https://www.cdc-habitat.fr/recherche/vivelli";
     const baseUrl = url.split("?")[0];
 
