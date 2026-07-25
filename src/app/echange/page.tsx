@@ -30,7 +30,7 @@ interface ExchangeListing {
 
 const defaultForm = {
   username: "", title: "", description: "", city: "",
-  surface: "", rooms: "", price: "",
+  surface: "", rooms: "", price: "", phone: "",
 };
 
 export default function EchangePage() {
@@ -301,6 +301,16 @@ export default function EchangePage() {
                     <FInput label="Nombre de pièces" type="number" value={postForm.rooms} onChange={(v) => setPostForm((p) => ({ ...p, rooms: v }))} required placeholder="Ex: 3" />
                   </div>
                   <FInput label="Loyer (€)" type="number" value={postForm.price} onChange={(v) => setPostForm((p) => ({ ...p, price: v }))} required placeholder="Ex: 450" />
+
+                  <div className="bg-amber-50 rounded-xl p-3 flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0">
+                      <span className="text-amber-600 font-bold text-sm">📱</span>
+                    </div>
+                    <p className="text-xs text-amber-800">
+                      Votre numéro sera visible uniquement par l&apos;administrateur pour valider votre annonce. Il n&apos;apparaîtra pas sur la carte.
+                    </p>
+                  </div>
+                  <FInput label="Téléphone (pour validation)" type="tel" value={postForm.phone} onChange={(v) => setPostForm((p) => ({ ...p, phone: v }))} required placeholder="Ex: 0612345678" />
 
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Photos</label>

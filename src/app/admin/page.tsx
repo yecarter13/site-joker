@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AdminGuard from "@/components/AdminGuard";
 import { formatPrice } from "@/lib/utils";
-import { HiPlus, HiPencil, HiTrash, HiLogout, HiHome, HiDocumentText, HiSwitchHorizontal } from "react-icons/hi";
+import { HiPlus, HiPencil, HiTrash, HiLogout, HiHome, HiDocumentText, HiSwitchHorizontal, HiCheck } from "react-icons/hi";
 
 interface Property {
   id: string;
@@ -26,6 +26,8 @@ interface ExchangeItem {
   surface: number;
   rooms: number;
   price: number;
+  phone: string;
+  status: string;
   createdAt: string;
 }
 
@@ -49,13 +51,22 @@ function AdminDashboard() {
   useEffect(load, []);
 
   function loadExchanges() {
-    fetch("/api/exchange")
+    fetch("/api/exchange?all=true")
       .then((r) => r.json())
       .then((data) => {
         setExchanges(data);
         setLoadingExchanges(false);
       })
       .catch(() => setLoadingExchanges(false));
+  }
+
+  async function approveExchange(id: string) {
+    await fetch(`/api/exchange/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "approved" }),
+    });
+    loadExchanges();
   }
 
   useEffect(loadExchanges, []);
@@ -277,23 +288,43 @@ function AdminDashboard() {
               {/* Mobile cards */}
               <div className="block md:hidden space-y-3">
                 {exchanges.map((e) => (
-                  <div key={e.id} className="bg-white rounded-xl border border-gray-200 p-4">
+                  <div key={e.id} className={`bg-white rounded-xl border p-4 ${e.status === "pending" ? "border-amber-200 bg-amber-50/50" : "border-gray-200"}`}>
                     <div className="flex items-center gap-3 mb-3">
                       <img src={e.avatar} alt="" className="w-10 h-10 rounded-full bg-gray-100" />
                       <div className="min-w-0 flex-1">
-                        <div className="font-semibold text-gray-900 text-sm truncate">{e.title}</div>
+                        <div className="flex items-center gap-2">
+                          <div className="font-semibold text-gray-900 text-sm truncate">{e.title}</div>
+                          {e.status === "pending" && (
+                            <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0">En attente</span>
+                          )}
+                          {e.status === "approved" && (
+                            <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0">Validé</span>
+                          )}
+                        </div>
                         <div className="text-xs text-gray-500">{e.city} • {e.surface}m² • {e.rooms} pièces</div>
                         <div className="font-bold text-emerald-600 text-sm mt-0.5">{e.price} €</div>
                       </div>
                     </div>
+                    {e.phone && <div className="text-xs text-gray-500 mb-2">📱 {e.phone}</div>}
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-400">{e.username}</span>
-                      <button
-                        onClick={() => deleteExchange(e.id)}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                      >
-                        <HiTrash size={16} />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        {e.status === "pending" && (
+                          <button
+                            onClick={() => approveExchange(e.id)}
+                            className="p-2 text-emerald-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-all"
+                            title="Valider"
+                          >
+                            <HiCheck size={16} />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => deleteExchange(e.id)}
+                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                        >
+                          <HiTrash size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -305,18 +336,25 @@ function AdminDashboard() {
                   <table className="w-full text-sm">
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
+                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Statut</th>
                         <th className="text-left px-4 py-3 font-semibold text-gray-600">Utilisateur</th>
                         <th className="text-left px-4 py-3 font-semibold text-gray-600">Titre</th>
                         <th className="text-left px-4 py-3 font-semibold text-gray-600">Ville</th>
-                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Surface</th>
-                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Pièces</th>
+                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Tél.</th>
                         <th className="text-left px-4 py-3 font-semibold text-gray-600">Prix</th>
                         <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {exchanges.map((e) => (
-                        <tr key={e.id} className="hover:bg-gray-50 transition-colors">
+                        <tr key={e.id} className={`hover:bg-gray-50 transition-colors ${e.status === "pending" ? "bg-amber-50/50" : ""}`}>
+                          <td className="px-4 py-3">
+                            {e.status === "pending" ? (
+                              <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full">En attente</span>
+                            ) : (
+                              <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Validé</span>
+                            )}
+                          </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
                               <img src={e.avatar} alt="" className="w-8 h-8 rounded-full bg-gray-100" />
@@ -324,17 +362,27 @@ function AdminDashboard() {
                             </div>
                           </td>
                           <td className="px-4 py-3 font-medium text-gray-900">{e.title}</td>
-                          <td className="px-4 py-3 text-gray-500">{e.city}</td>
-                          <td className="px-4 py-3 text-gray-500">{e.surface} m²</td>
-                          <td className="px-4 py-3 text-gray-500">{e.rooms}</td>
+                          <td className="px-4 py-3 text-gray-500">{e.city} • {e.surface}m² • {e.rooms}p</td>
+                          <td className="px-4 py-3 text-gray-500 text-xs">{e.phone || "—"}</td>
                           <td className="px-4 py-3 font-semibold text-gray-900">{e.price} €</td>
                           <td className="px-4 py-3 text-right">
-                            <button
-                              onClick={() => deleteExchange(e.id)}
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                            >
-                              <HiTrash size={16} />
-                            </button>
+                            <div className="flex items-center justify-end gap-1">
+                              {e.status === "pending" && (
+                                <button
+                                  onClick={() => approveExchange(e.id)}
+                                  className="p-2 text-emerald-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-all"
+                                  title="Valider"
+                                >
+                                  <HiCheck size={16} />
+                                </button>
+                              )}
+                              <button
+                                onClick={() => deleteExchange(e.id)}
+                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                              >
+                                <HiTrash size={16} />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}

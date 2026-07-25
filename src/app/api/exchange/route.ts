@@ -15,9 +15,15 @@ function randomAvatar(username: string): string {
   return `${style}${encodeURIComponent(username)}`;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const all = searchParams.get("all") === "true";
+
+    const where = all ? {} : { status: "approved" };
+
     const listings = await prisma.exchangeListing.findMany({
+      where,
       orderBy: { createdAt: "desc" },
     });
     const parsed = listings.map((l) => ({
@@ -35,7 +41,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { username, title, description, city, surface, rooms, price, images } = body;
+    const { username, title, description, city, surface, rooms, price, images, phone } = body;
 
     if (!username || !title || !city || !surface || !rooms || !price) {
       return NextResponse.json(
@@ -55,6 +61,8 @@ export async function POST(request: Request) {
         rooms: parseInt(rooms),
         price: parseFloat(price),
         images: JSON.stringify(images || []),
+        phone: phone || "",
+        status: "pending",
       },
     });
 

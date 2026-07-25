@@ -61,5 +61,7 @@ model ExchangeListing {
   rooms       Int
   price       Float
   images      String   @default("[]")
+  phone       String   @default("")
+  status      String   @default("pending")
   createdAt   DateTime @default(now())
 }
