@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { getWhatsAppLink } from "@/lib/utils";
 import {
   HiX, HiCheck, HiHome, HiLocationMarker, HiChartBar, HiStar,
-  HiPhotograph, HiUser, HiPlus,
+  HiPhotograph, HiUser, HiPlus, HiChevronLeft, HiChevronRight,
 } from "react-icons/hi";
 import {
   FaExchangeAlt, FaArrowRight, FaUsers, FaBuilding,
@@ -49,6 +49,8 @@ export default function EchangePage() {
   const [images, setImages] = useState<string[]>([]);
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(-1);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
 
   useEffect(() => {
     fetchListings();
@@ -66,6 +68,28 @@ export default function EchangePage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function openLightbox(images: string[], index: number) {
+    setLightboxImages(images);
+    setLightboxIndex(index);
+  }
+
+  function closeLightbox() {
+    setLightboxIndex(-1);
+    setLightboxImages([]);
+  }
+
+  function prevImage() {
+    setLightboxIndex((prev) =>
+      prev <= 0 ? lightboxImages.length - 1 : prev - 1
+    );
+  }
+
+  function nextImage() {
+    setLightboxIndex((prev) =>
+      prev >= lightboxImages.length - 1 ? 0 : prev + 1
+    );
   }
 
   function update(field: string, value: string) {
@@ -235,13 +259,28 @@ export default function EchangePage() {
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {listings.map((listing) => (
                   <div key={listing.id} className="bg-white rounded-2xl border border-gray-100 hover:shadow-xl transition-all overflow-hidden group">
-                    {listing.images && listing.images.length > 0 && (
-                      <div className="h-44 bg-gray-100 overflow-hidden">
+                    {listing.images && listing.images.length > 0 ? (
+                      <div
+                        className="h-44 bg-gray-100 overflow-hidden cursor-pointer"
+                        onClick={() => openLightbox(listing.images, 0)}
+                      >
                         <img
                           src={listing.images[0]}
                           alt={listing.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
+                        {listing.images.length > 1 && (
+                          <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full backdrop-blur-sm">
+                            1/{listing.images.length}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div
+                        className="h-44 bg-gray-100 flex items-center justify-center cursor-pointer"
+                        onClick={() => openLightbox(listing.images, 0)}
+                      >
+                        <HiPhotograph className="text-gray-300 text-4xl" />
                       </div>
                     )}
                     <div className="p-6">
@@ -292,6 +331,46 @@ export default function EchangePage() {
           </div>
         </section>
 
+        {/* ─── LIGHTBOX ─── */}
+        {lightboxIndex >= 0 && lightboxImages.length > 0 && (
+          <div
+            className="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center"
+            onClick={closeLightbox}
+          >
+            <button
+              onClick={closeLightbox}
+              className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors z-10 cursor-pointer"
+            >
+              <HiX size={28} />
+            </button>
+
+            <button
+              onClick={(e) => { e.stopPropagation(); prevImage(); }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors cursor-pointer"
+            >
+              <HiChevronLeft size={40} />
+            </button>
+
+            <img
+              src={lightboxImages[lightboxIndex]}
+              alt=""
+              className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+
+            <button
+              onClick={(e) => { e.stopPropagation(); nextImage(); }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors cursor-pointer"
+            >
+              <HiChevronRight size={40} />
+            </button>
+
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/50 text-white text-sm px-3 py-1.5 rounded-full backdrop-blur-sm">
+              {lightboxIndex + 1} / {lightboxImages.length}
+            </div>
+          </div>
+        )}
+
         {/* ─── POST FORM MODAL ─── */}
         {showPostForm && (
           <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
@@ -337,7 +416,6 @@ export default function EchangePage() {
                   </div>
                   <FInput label="Loyer (€)" type="number" value={postForm.price} onChange={(v) => setPostForm((p) => ({ ...p, price: v }))} required placeholder="Ex: 450" />
 
-                  {/* ─── Images ─── */}
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Photos</label>
                     <div className="flex flex-wrap gap-2">

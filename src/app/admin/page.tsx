@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AdminGuard from "@/components/AdminGuard";
 import { formatPrice } from "@/lib/utils";
-import { HiPlus, HiPencil, HiTrash, HiLogout, HiHome, HiDocumentText } from "react-icons/hi";
+import { HiPlus, HiPencil, HiTrash, HiLogout, HiHome, HiDocumentText, HiSwitchHorizontal } from "react-icons/hi";
 
 interface Property {
   id: string;
@@ -17,10 +17,24 @@ interface Property {
   images: string[];
 }
 
+interface ExchangeItem {
+  id: string;
+  username: string;
+  avatar: string;
+  title: string;
+  city: string;
+  surface: number;
+  rooms: number;
+  price: number;
+  createdAt: string;
+}
+
 function AdminDashboard() {
   const router = useRouter();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
+  const [exchanges, setExchanges] = useState<ExchangeItem[]>([]);
+  const [loadingExchanges, setLoadingExchanges] = useState(true);
 
   function load() {
     fetch("/api/properties")
@@ -33,6 +47,24 @@ function AdminDashboard() {
   }
 
   useEffect(load, []);
+
+  function loadExchanges() {
+    fetch("/api/exchange")
+      .then((r) => r.json())
+      .then((data) => {
+        setExchanges(data);
+        setLoadingExchanges(false);
+      })
+      .catch(() => setLoadingExchanges(false));
+  }
+
+  useEffect(loadExchanges, []);
+
+  async function deleteExchange(id: string) {
+    if (!confirm("Supprimer cette annonce d'échange ?")) return;
+    await fetch(`/api/exchange/${id}`, { method: "DELETE" });
+    loadExchanges();
+  }
 
   async function deleteProperty(id: string) {
     if (!confirm("Supprimer ce logement ?")) return;
@@ -221,6 +253,98 @@ function AdminDashboard() {
             </div>
           </>
         )}
+        {/* ─── EXCHANGE LISTINGS ─── */}
+        <div className="mt-12 pt-12 border-t border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900">Annonces d&apos;échange</h2>
+              <p className="text-sm text-gray-500">{exchanges.length} annonce(s)</p>
+            </div>
+          </div>
+
+          {loadingExchanges ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600" />
+            </div>
+          ) : exchanges.length === 0 ? (
+            <div className="text-center py-12 bg-white rounded-2xl border border-gray-200">
+              <HiSwitchHorizontal className="text-4xl text-gray-300 mx-auto mb-3" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">Aucune annonce d&apos;échange</h3>
+              <p className="text-gray-500 text-sm">Les annonces postées sur la page échange apparaîtront ici.</p>
+            </div>
+          ) : (
+            <>
+              {/* Mobile cards */}
+              <div className="block md:hidden space-y-3">
+                {exchanges.map((e) => (
+                  <div key={e.id} className="bg-white rounded-xl border border-gray-200 p-4">
+                    <div className="flex items-center gap-3 mb-3">
+                      <img src={e.avatar} alt="" className="w-10 h-10 rounded-full bg-gray-100" />
+                      <div className="min-w-0 flex-1">
+                        <div className="font-semibold text-gray-900 text-sm truncate">{e.title}</div>
+                        <div className="text-xs text-gray-500">{e.city} • {e.surface}m² • {e.rooms} pièces</div>
+                        <div className="font-bold text-emerald-600 text-sm mt-0.5">{e.price} €</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-400">{e.username}</span>
+                      <button
+                        onClick={() => deleteExchange(e.id)}
+                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                      >
+                        <HiTrash size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop table */}
+              <div className="hidden md:block bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-50 border-b border-gray-200">
+                      <tr>
+                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Utilisateur</th>
+                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Titre</th>
+                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Ville</th>
+                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Surface</th>
+                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Pièces</th>
+                        <th className="text-left px-4 py-3 font-semibold text-gray-600">Prix</th>
+                        <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {exchanges.map((e) => (
+                        <tr key={e.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2">
+                              <img src={e.avatar} alt="" className="w-8 h-8 rounded-full bg-gray-100" />
+                              <span className="text-gray-900 font-medium">{e.username}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 font-medium text-gray-900">{e.title}</td>
+                          <td className="px-4 py-3 text-gray-500">{e.city}</td>
+                          <td className="px-4 py-3 text-gray-500">{e.surface} m²</td>
+                          <td className="px-4 py-3 text-gray-500">{e.rooms}</td>
+                          <td className="px-4 py-3 font-semibold text-gray-900">{e.price} €</td>
+                          <td className="px-4 py-3 text-right">
+                            <button
+                              onClick={() => deleteExchange(e.id)}
+                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                            >
+                              <HiTrash size={16} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </main>
     </div>
   );
