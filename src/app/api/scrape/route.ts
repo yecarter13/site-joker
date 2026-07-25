@@ -128,6 +128,21 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, deleted: cdc.length });
     }
 
+    // Delete all premium with price = 0
+    if (mode === "delete-zero") {
+      const zero = await prisma.property.findMany({
+        where: { premium: true, price: 0 },
+        select: { id: true, title: true },
+      });
+      if (zero.length === 0) {
+        return NextResponse.json({ success: true, deleted: 0, message: "Aucun logement premium à 0€" });
+      }
+      await prisma.property.deleteMany({
+        where: { premium: true, price: 0 },
+      });
+      return NextResponse.json({ success: true, deleted: zero.length });
+    }
+
     const url = searchParams.get("url") || "https://www.cdc-habitat.fr/recherche/vivelli";
     const baseUrl = url.split("?")[0];
 
