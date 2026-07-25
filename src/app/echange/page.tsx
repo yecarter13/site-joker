@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getWhatsAppLink, whatsappLink } from "@/lib/utils";
+import { getWhatsAppLink } from "@/lib/utils";
 import {
   HiX, HiCheck, HiHome, HiLocationMarker, HiChartBar, HiStar,
-  HiPhotograph, HiPhone, HiUser, HiPencil,
+  HiPhotograph, HiUser, HiPlus,
 } from "react-icons/hi";
 import {
   FaExchangeAlt, FaArrowRight, FaUsers, FaBuilding,
   FaMapMarkerAlt, FaShieldAlt, FaComments, FaHandshake,
-  FaPlus, FaBed, FaRulerCombined, FaEuroSign, FaHashtag, FaHome,
+  FaPlus, FaBed, FaRulerCombined, FaEuroSign, FaHome,
 } from "react-icons/fa";
 
 interface ExchangeListing {
@@ -24,13 +24,13 @@ interface ExchangeListing {
   surface: number;
   rooms: number;
   price: number;
-  whatsapp: string;
+  images: string[];
   createdAt: string;
 }
 
 const defaultForm = {
   username: "", title: "", description: "", city: "",
-  surface: "", rooms: "", price: "", whatsapp: "",
+  surface: "", rooms: "", price: "",
 };
 
 export default function EchangePage() {
@@ -46,6 +46,9 @@ export default function EchangePage() {
     numeroUnique: "", email: "", departementRecherche: "", criteres: "",
   });
   const [postForm, setPostForm] = useState(defaultForm);
+  const [images, setImages] = useState<string[]>([]);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchListings();
@@ -95,21 +98,41 @@ export default function EchangePage() {
     setForm({ ville: "", departement: "", adresse: "", nomPrenom: "", numeroUnique: "", email: "", departementRecherche: "", criteres: "" });
   }
 
+  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        setImages((prev) => [...prev, event.target!.result as string]);
+      }
+      setUploadingImage(false);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  }
+
+  function removeImage(index: number) {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  }
+
   function handlePostSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!postForm.username || !postForm.title || !postForm.city || !postForm.surface || !postForm.rooms || !postForm.price || !postForm.whatsapp) return;
+    if (!postForm.username || !postForm.title || !postForm.city || !postForm.surface || !postForm.rooms || !postForm.price) return;
     setPosting(true);
 
     fetch("/api/exchange", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(postForm),
+      body: JSON.stringify({ ...postForm, images }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.error) throw new Error(data.error);
         setPostSuccess(true);
         setPostForm(defaultForm);
+        setImages([]);
         fetchListings();
         setTimeout(() => { setShowPostForm(false); setPostSuccess(false); }, 2000);
       })
@@ -181,7 +204,7 @@ export default function EchangePage() {
                 </p>
               </div>
               <button
-                onClick={() => { setShowPostForm(true); setPostSuccess(false); }}
+                onClick={() => { setShowPostForm(true); setPostSuccess(false); setImages([]); }}
                 className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg cursor-pointer"
               >
                 <FaPlus /> Poster mon logement
@@ -212,6 +235,15 @@ export default function EchangePage() {
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {listings.map((listing) => (
                   <div key={listing.id} className="bg-white rounded-2xl border border-gray-100 hover:shadow-xl transition-all overflow-hidden group">
+                    {listing.images && listing.images.length > 0 && (
+                      <div className="h-44 bg-gray-100 overflow-hidden">
+                        <img
+                          src={listing.images[0]}
+                          alt={listing.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                    )}
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <img
@@ -245,7 +277,7 @@ export default function EchangePage() {
                         </span>
                       </div>
                       <a
-                        href={whatsappLink(listing.whatsapp, `Bonjour ${listing.username}, je suis intéressé(e) par votre logement : ${listing.title} à ${listing.city}. Souhaitez-vous échanger ?`)}
+                        href={getWhatsAppLink(`Bonjour, je suis intéressé(e) par le logement de ${listing.username} : "${listing.title}" à ${listing.city}. Pouvez-vous me mettre en relation ?`)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-2 w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer"
@@ -304,7 +336,27 @@ export default function EchangePage() {
                     <FInput label="Nombre de pièces" type="number" value={postForm.rooms} onChange={(v) => setPostForm((p) => ({ ...p, rooms: v }))} required placeholder="Ex: 3" />
                   </div>
                   <FInput label="Loyer (€)" type="number" value={postForm.price} onChange={(v) => setPostForm((p) => ({ ...p, price: v }))} required placeholder="Ex: 450" />
-                  <FInput label="WhatsApp (numéro)" value={postForm.whatsapp} onChange={(v) => setPostForm((p) => ({ ...p, whatsapp: v }))} required placeholder="Ex: 33612345678" />
+
+                  {/* ─── Images ─── */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Photos</label>
+                    <div className="flex flex-wrap gap-2">
+                      {images.map((img, i) => (
+                        <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-200 group">
+                          <img src={img} alt="" className="w-full h-full object-cover" />
+                          <button type="button" onClick={() => removeImage(i)} className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                            <HiX size={12} />
+                          </button>
+                        </div>
+                      ))}
+                      <button type="button" onClick={() => fileRef.current?.click()} disabled={uploadingImage} className="w-20 h-20 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center text-gray-400 hover:text-emerald-500 hover:border-emerald-500 transition-colors bg-gray-50 cursor-pointer">
+                        {uploadingImage ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-500" /> : <HiPlus size={20} />}
+                      </button>
+                    </div>
+                    <input ref={fileRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                    <p className="text-[10px] text-gray-400 mt-1">La première photo sera affichée sur la carte.</p>
+                  </div>
+
                   <button type="submit" disabled={posting} className="w-full bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-400 hover:to-emerald-600 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg disabled:opacity-50 cursor-pointer">
                     {posting ? "Publication..." : "Publier mon annonce →"}
                   </button>

@@ -60,6 +60,6 @@ model ExchangeListing {
   surface     Float
   rooms       Int
   price       Float
-  whatsapp    String
+  images      String   @default("[]")
   createdAt   DateTime @default(now())
 }

@@ -20,7 +20,11 @@ export async function GET() {
     const listings = await prisma.exchangeListing.findMany({
       orderBy: { createdAt: "desc" },
     });
-    return NextResponse.json(listings);
+    const parsed = listings.map((l) => ({
+      ...l,
+      images: JSON.parse(l.images || "[]"),
+    }));
+    return NextResponse.json(parsed);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Erreur inconnue";
     console.error("GET /api/exchange error:", error);
@@ -31,9 +35,9 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { username, title, description, city, surface, rooms, price, whatsapp } = body;
+    const { username, title, description, city, surface, rooms, price, images } = body;
 
-    if (!username || !title || !city || !surface || !rooms || !price || !whatsapp) {
+    if (!username || !title || !city || !surface || !rooms || !price) {
       return NextResponse.json(
         { error: "Champs obligatoires manquants" },
         { status: 400 }
@@ -50,11 +54,11 @@ export async function POST(request: Request) {
         surface: parseFloat(surface),
         rooms: parseInt(rooms),
         price: parseFloat(price),
-        whatsapp,
+        images: JSON.stringify(images || []),
       },
     });
 
-    return NextResponse.json(listing);
+    return NextResponse.json({ ...listing, images: JSON.parse(listing.images || "[]") });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Erreur inconnue";
     console.error("POST /api/exchange error:", error);
