@@ -143,6 +143,34 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, deleted: zero.length });
     }
 
+    // Dedup mode: remove duplicates (same title + city + price + surface)
+    if (mode === "dedup") {
+      const all = await prisma.property.findMany({
+        orderBy: { createdAt: "asc" },
+        select: { id: true, title: true, city: true, price: true, surface: true, reference: true },
+      });
+      const seen = new Map<string, string[]>();
+      let removed = 0;
+      for (const p of all) {
+        const key = `${p.title}|${p.city}|${p.price}|${p.surface}`.toLowerCase();
+        if (!seen.has(key)) {
+          seen.set(key, [p.id]);
+        } else {
+          const ids = seen.get(key)!;
+          ids.push(p.id);
+        }
+      }
+      for (const [key, ids] of seen) {
+        if (ids.length > 1) {
+          // Keep the first (oldest), delete the rest
+          const toDelete = ids.slice(1);
+          await prisma.property.deleteMany({ where: { id: { in: toDelete } } });
+          removed += toDelete.length;
+        }
+      }
+      return NextResponse.json({ success: true, removed, totalKept: seen.size });
+    }
+
     const url = searchParams.get("url") || "https://www.cdc-habitat.fr/recherche/vivelli";
     const baseUrl = url.split("?")[0];
 
