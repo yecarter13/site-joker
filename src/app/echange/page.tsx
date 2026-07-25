@@ -215,121 +215,7 @@ export default function EchangePage() {
           </div>
         </section>
 
-        {/* ─── LISTINGS ─── */}
-        <section className="py-16 md:py-24 bg-gray-50">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-                  Annonces d&apos;échange
-                </h2>
-                <p className="text-gray-500 mt-1">
-                  {listings.length} logement{listings.length > 1 ? "s" : ""} disponible{listings.length > 1 ? "s" : ""}
-                </p>
-              </div>
-              <button
-                onClick={() => { setShowPostForm(true); setPostSuccess(false); setImages([]); }}
-                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg cursor-pointer"
-              >
-                <FaPlus /> Poster mon logement
-              </button>
-            </div>
 
-            {loading ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 bg-gray-200 rounded-full" />
-                      <div className="h-4 bg-gray-200 rounded w-24" />
-                    </div>
-                    <div className="h-5 bg-gray-200 rounded w-3/4 mb-3" />
-                    <div className="h-4 bg-gray-200 rounded w-full mb-2" />
-                    <div className="h-4 bg-gray-200 rounded w-1/2" />
-                  </div>
-                ))}
-              </div>
-            ) : listings.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
-                <FaHome className="text-5xl text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500 text-lg">Aucune annonce pour le moment</p>
-                <p className="text-gray-400 text-sm mt-1">Soyez le premier à publier votre logement !</p>
-              </div>
-            ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {listings.map((listing) => (
-                  <div key={listing.id} className="bg-white rounded-2xl border border-gray-100 hover:shadow-xl transition-all overflow-hidden group">
-                    {listing.images && listing.images.length > 0 ? (
-                      <div
-                        className="h-44 bg-gray-100 overflow-hidden cursor-pointer"
-                        onClick={() => openLightbox(listing.images, 0)}
-                      >
-                        <img
-                          src={listing.images[0]}
-                          alt={listing.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        {listing.images.length > 1 && (
-                          <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full backdrop-blur-sm">
-                            1/{listing.images.length}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div
-                        className="h-44 bg-gray-100 flex items-center justify-center cursor-pointer"
-                        onClick={() => openLightbox(listing.images, 0)}
-                      >
-                        <HiPhotograph className="text-gray-300 text-4xl" />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 mb-4">
-                        <img
-                          src={listing.avatar}
-                          alt={listing.username}
-                          className="w-12 h-12 rounded-full bg-gray-100"
-                        />
-                        <div>
-                          <p className="font-semibold text-gray-900 text-sm">{listing.username}</p>
-                          <p className="text-xs text-gray-400">
-                            {new Date(listing.createdAt).toLocaleDateString("fr-FR")}
-                          </p>
-                        </div>
-                      </div>
-                      <h3 className="font-bold text-gray-900 text-lg mb-2">{listing.title}</h3>
-                      {listing.description && (
-                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{listing.description}</p>
-                      )}
-                      <div className="flex flex-wrap gap-3 mb-4">
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
-                          <FaMapMarkerAlt className="text-emerald-500" /> {listing.city}
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
-                          <FaRulerCombined className="text-emerald-500" /> {listing.surface} m²
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
-                          <FaBed className="text-emerald-500" /> {listing.rooms} pièce{listing.rooms > 1 ? "s" : ""}
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
-                          <FaEuroSign className="text-emerald-500" /> {listing.price} €
-                        </span>
-                      </div>
-                      <a
-                        href={getWhatsAppLink(`Bonjour, je suis intéressé(e) par le logement de ${listing.username} : "${listing.title}" à ${listing.city}. Pouvez-vous me mettre en relation ?`)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer"
-                      >
-                        <FaComments /> Contacter pour un échange
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
 
         {/* ─── LIGHTBOX ─── */}
         {lightboxIndex >= 0 && lightboxImages.length > 0 && (
@@ -572,6 +458,122 @@ export default function EchangePage() {
               Ça prend moins de 2 minutes.
             </p>
             <CTAButton className="px-10 py-5 rounded-xl text-lg" />
+          </div>
+        </section>
+
+        {/* ─── LISTINGS ─── */}
+        <section className="py-16 md:py-24 bg-gray-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
+                  Annonces d&apos;échange
+                </h2>
+                <p className="text-gray-500 mt-1">
+                  {listings.length} logement{listings.length > 1 ? "s" : ""} disponible{listings.length > 1 ? "s" : ""}
+                </p>
+              </div>
+              <button
+                onClick={() => { setShowPostForm(true); setPostSuccess(false); setImages([]); }}
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg cursor-pointer"
+              >
+                <FaPlus /> Poster mon logement
+              </button>
+            </div>
+
+            {loading ? (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                      <div className="h-4 bg-gray-200 rounded w-24" />
+                    </div>
+                    <div className="h-5 bg-gray-200 rounded w-3/4 mb-3" />
+                    <div className="h-4 bg-gray-200 rounded w-full mb-2" />
+                    <div className="h-4 bg-gray-200 rounded w-1/2" />
+                  </div>
+                ))}
+              </div>
+            ) : listings.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+                <FaHome className="text-5xl text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 text-lg">Aucune annonce pour le moment</p>
+                <p className="text-gray-400 text-sm mt-1">Soyez le premier à publier votre logement !</p>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {listings.map((listing) => (
+                  <div key={listing.id} className="bg-white rounded-2xl border border-gray-100 hover:shadow-xl transition-all overflow-hidden group">
+                    {listing.images && listing.images.length > 0 ? (
+                      <div
+                        className="h-44 bg-gray-100 overflow-hidden cursor-pointer"
+                        onClick={() => openLightbox(listing.images, 0)}
+                      >
+                        <img
+                          src={listing.images[0]}
+                          alt={listing.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        {listing.images.length > 1 && (
+                          <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full backdrop-blur-sm">
+                            1/{listing.images.length}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div
+                        className="h-44 bg-gray-100 flex items-center justify-center cursor-pointer"
+                        onClick={() => openLightbox(listing.images, 0)}
+                      >
+                        <HiPhotograph className="text-gray-300 text-4xl" />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <img
+                          src={listing.avatar}
+                          alt={listing.username}
+                          className="w-12 h-12 rounded-full bg-gray-100"
+                        />
+                        <div>
+                          <p className="font-semibold text-gray-900 text-sm">{listing.username}</p>
+                          <p className="text-xs text-gray-400">
+                            {new Date(listing.createdAt).toLocaleDateString("fr-FR")}
+                          </p>
+                        </div>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-lg mb-2">{listing.title}</h3>
+                      {listing.description && (
+                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{listing.description}</p>
+                      )}
+                      <div className="flex flex-wrap gap-3 mb-4">
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+                          <FaMapMarkerAlt className="text-emerald-500" /> {listing.city}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+                          <FaRulerCombined className="text-emerald-500" /> {listing.surface} m²
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+                          <FaBed className="text-emerald-500" /> {listing.rooms} pièce{listing.rooms > 1 ? "s" : ""}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+                          <FaEuroSign className="text-emerald-500" /> {listing.price} €
+                        </span>
+                      </div>
+                      <a
+                        href={getWhatsAppLink(`Bonjour, je suis intéressé(e) par le logement de ${listing.username} : "${listing.title}" à ${listing.city}. Pouvez-vous me mettre en relation ?`)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer"
+                      >
+                        <FaComments /> Contacter pour un échange
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>
