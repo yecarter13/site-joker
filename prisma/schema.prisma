@@ -49,3 +49,17 @@ model Admin {
   username String @unique
   password String
 }
+
+model ExchangeListing {
+  id          String   @id @default(uuid())
+  username    String
+  avatar      String
+  title       String
+  description String
+  city        String
+  surface     Float
+  rooms       Int
+  price       Float
+  whatsapp    String
+  createdAt   DateTime @default(now())
+}

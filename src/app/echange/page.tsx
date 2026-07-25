@@ -1,19 +1,69 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getWhatsAppLink } from "@/lib/utils";
-import { HiX, HiCheck, HiHome, HiLocationMarker, HiChartBar, HiStar } from "react-icons/hi";
-import { FaExchangeAlt, FaArrowRight, FaUsers, FaBuilding, FaMapMarkerAlt, FaShieldAlt, FaComments, FaHandshake } from "react-icons/fa";
+import { getWhatsAppLink, whatsappLink } from "@/lib/utils";
+import {
+  HiX, HiCheck, HiHome, HiLocationMarker, HiChartBar, HiStar,
+  HiPhotograph, HiPhone, HiUser, HiPencil,
+} from "react-icons/hi";
+import {
+  FaExchangeAlt, FaArrowRight, FaUsers, FaBuilding,
+  FaMapMarkerAlt, FaShieldAlt, FaComments, FaHandshake,
+  FaPlus, FaBed, FaRulerCombined, FaEuroSign, FaHashtag, FaHome,
+} from "react-icons/fa";
+
+interface ExchangeListing {
+  id: string;
+  username: string;
+  avatar: string;
+  title: string;
+  description: string;
+  city: string;
+  surface: number;
+  rooms: number;
+  price: number;
+  whatsapp: string;
+  createdAt: string;
+}
+
+const defaultForm = {
+  username: "", title: "", description: "", city: "",
+  surface: "", rooms: "", price: "", whatsapp: "",
+};
 
 export default function EchangePage() {
   const [showModal, setShowModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [listings, setListings] = useState<ExchangeListing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showPostForm, setShowPostForm] = useState(false);
+  const [posting, setPosting] = useState(false);
+  const [postSuccess, setPostSuccess] = useState(false);
   const [form, setForm] = useState({
     ville: "", departement: "", adresse: "", nomPrenom: "",
     numeroUnique: "", email: "", departementRecherche: "", criteres: "",
   });
+  const [postForm, setPostForm] = useState(defaultForm);
+
+  useEffect(() => {
+    fetchListings();
+  }, []);
+
+  async function fetchListings() {
+    try {
+      const res = await fetch("/api/exchange");
+      if (res.ok) {
+        const data = await res.json();
+        setListings(data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch listings", e);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function update(field: string, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -45,6 +95,31 @@ export default function EchangePage() {
     setForm({ ville: "", departement: "", adresse: "", nomPrenom: "", numeroUnique: "", email: "", departementRecherche: "", criteres: "" });
   }
 
+  function handlePostSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!postForm.username || !postForm.title || !postForm.city || !postForm.surface || !postForm.rooms || !postForm.price || !postForm.whatsapp) return;
+    setPosting(true);
+
+    fetch("/api/exchange", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(postForm),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) throw new Error(data.error);
+        setPostSuccess(true);
+        setPostForm(defaultForm);
+        fetchListings();
+        setTimeout(() => { setShowPostForm(false); setPostSuccess(false); }, 2000);
+      })
+      .catch((err) => {
+        console.error("Failed to post listing", err);
+        alert("Erreur lors de la publication");
+      })
+      .finally(() => setPosting(false));
+  }
+
   const CTAButton = ({ className = "" }: { className?: string }) => (
     <button
       onClick={() => setShowModal(true)}
@@ -72,7 +147,7 @@ export default function EchangePage() {
                 Trouvez un échange de HLM en quelques clics
               </h1>
               <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-8 max-w-2xl">
-                La première plateforme de mise en relation entre locataires de logements sociaux. 
+                La première plateforme de mise en relation entre locataires de logements sociaux.
                 Trouvez un partenaire d&apos;échange compatible, on gère toute la paperasse pour vous.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -91,24 +166,154 @@ export default function EchangePage() {
               </div>
             </div>
           </div>
-          {/* Decorative cards */}
-          <div className="hidden lg:block absolute right-10 top-1/2 -translate-y-1/2 space-y-4">
-            {[
-              { city: "Appartement T3, Paris", detail: "Lyon • 65m² • 450€", match: "92% match" },
-              { city: "Appartement T2, Marseille", detail: "Paris • 55m² • 380€", match: "88% match" },
-              { city: "Appartement T4, Lyon", detail: "Marseille • 78m² • 520€", match: "85% match" },
-            ].map((card, i) => (
-              <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 w-64 border border-white/10 hover:bg-white/20 transition-all">
-                <div className="text-sm font-bold text-white">{card.city}</div>
-                <div className="text-xs text-gray-400 mt-1">{card.detail}</div>
-                <div className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-400/10 rounded-full px-2.5 py-0.5">
-                  <HiChartBar className="text-[10px]" /> {card.match}
-                </div>
+        </section>
+
+        {/* ─── LISTINGS ─── */}
+        <section className="py-16 md:py-24 bg-gray-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
+                  Annonces d&apos;échange
+                </h2>
+                <p className="text-gray-500 mt-1">
+                  {listings.length} logement{listings.length > 1 ? "s" : ""} disponible{listings.length > 1 ? "s" : ""}
+                </p>
               </div>
-            ))}
-            <div className="text-xs text-gray-400 text-center mt-2">Votre compatibilité est calculée en temps réel</div>
+              <button
+                onClick={() => { setShowPostForm(true); setPostSuccess(false); }}
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg cursor-pointer"
+              >
+                <FaPlus /> Poster mon logement
+              </button>
+            </div>
+
+            {loading ? (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                      <div className="h-4 bg-gray-200 rounded w-24" />
+                    </div>
+                    <div className="h-5 bg-gray-200 rounded w-3/4 mb-3" />
+                    <div className="h-4 bg-gray-200 rounded w-full mb-2" />
+                    <div className="h-4 bg-gray-200 rounded w-1/2" />
+                  </div>
+                ))}
+              </div>
+            ) : listings.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+                <FaHome className="text-5xl text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 text-lg">Aucune annonce pour le moment</p>
+                <p className="text-gray-400 text-sm mt-1">Soyez le premier à publier votre logement !</p>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {listings.map((listing) => (
+                  <div key={listing.id} className="bg-white rounded-2xl border border-gray-100 hover:shadow-xl transition-all overflow-hidden group">
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <img
+                          src={listing.avatar}
+                          alt={listing.username}
+                          className="w-12 h-12 rounded-full bg-gray-100"
+                        />
+                        <div>
+                          <p className="font-semibold text-gray-900 text-sm">{listing.username}</p>
+                          <p className="text-xs text-gray-400">
+                            {new Date(listing.createdAt).toLocaleDateString("fr-FR")}
+                          </p>
+                        </div>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-lg mb-2">{listing.title}</h3>
+                      {listing.description && (
+                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{listing.description}</p>
+                      )}
+                      <div className="flex flex-wrap gap-3 mb-4">
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+                          <FaMapMarkerAlt className="text-emerald-500" /> {listing.city}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+                          <FaRulerCombined className="text-emerald-500" /> {listing.surface} m²
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+                          <FaBed className="text-emerald-500" /> {listing.rooms} pièce{listing.rooms > 1 ? "s" : ""}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+                          <FaEuroSign className="text-emerald-500" /> {listing.price} €
+                        </span>
+                      </div>
+                      <a
+                        href={whatsappLink(listing.whatsapp, `Bonjour ${listing.username}, je suis intéressé(e) par votre logement : ${listing.title} à ${listing.city}. Souhaitez-vous échanger ?`)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer"
+                      >
+                        <FaComments /> Contacter pour un échange
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
+
+        {/* ─── POST FORM MODAL ─── */}
+        {showPostForm && (
+          <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowPostForm(false)} />
+            <div className="relative bg-white w-full sm:max-w-lg max-h-screen sm:max-h-[85vh] sm:rounded-2xl rounded-none shadow-2xl flex flex-col">
+              <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-start justify-between z-10 flex-shrink-0">
+                <div>
+                  <h2 className="text-base font-bold text-gray-900">Poster mon logement</h2>
+                  <p className="text-[11px] text-gray-500 mt-0.5">Proposez votre logement à l&apos;échange</p>
+                </div>
+                <button type="button" onClick={() => setShowPostForm(false)} className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"><HiX size={20} /></button>
+              </div>
+
+              {postSuccess ? (
+                <div className="flex flex-col items-center justify-center flex-1 p-8 text-center">
+                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <svg className="w-7 h-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Annonce publiée !</h3>
+                  <p className="text-sm text-gray-500 mb-6">Votre logement est maintenant visible.</p>
+                  <button onClick={() => setShowPostForm(false)} className="text-emerald-600 font-semibold text-sm hover:underline cursor-pointer">Fermer</button>
+                </div>
+              ) : (
+                <form onSubmit={handlePostSubmit} className="overflow-y-auto flex-1 px-4 py-4 space-y-3">
+                  <div className="bg-emerald-50 rounded-xl p-3 flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-full bg-emerald-200 flex items-center justify-center flex-shrink-0">
+                      <HiUser className="text-emerald-600" />
+                    </div>
+                    <p className="text-xs text-emerald-800">
+                      Un avatar unique sera généré automatiquement à partir de votre nom d&apos;utilisateur.
+                    </p>
+                  </div>
+                  <FInput label="Nom d'utilisateur" value={postForm.username} onChange={(v) => setPostForm((p) => ({ ...p, username: v }))} required placeholder="Ex: JeanDupont" />
+                  <FInput label="Titre de l'annonce" value={postForm.title} onChange={(v) => setPostForm((p) => ({ ...p, title: v }))} required placeholder="Ex: T3 calme et lumineux" />
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                    <textarea value={postForm.description} onChange={(e) => setPostForm((p) => ({ ...p, description: e.target.value }))} rows={2} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-400 outline-none resize-none" placeholder="Décrivez votre logement..." />
+                  </div>
+                  <FInput label="Ville" value={postForm.city} onChange={(v) => setPostForm((p) => ({ ...p, city: v }))} required placeholder="Ex: Paris" />
+                  <div className="grid grid-cols-2 gap-3">
+                    <FInput label="Surface (m²)" type="number" value={postForm.surface} onChange={(v) => setPostForm((p) => ({ ...p, surface: v }))} required placeholder="Ex: 65" />
+                    <FInput label="Nombre de pièces" type="number" value={postForm.rooms} onChange={(v) => setPostForm((p) => ({ ...p, rooms: v }))} required placeholder="Ex: 3" />
+                  </div>
+                  <FInput label="Loyer (€)" type="number" value={postForm.price} onChange={(v) => setPostForm((p) => ({ ...p, price: v }))} required placeholder="Ex: 450" />
+                  <FInput label="WhatsApp (numéro)" value={postForm.whatsapp} onChange={(v) => setPostForm((p) => ({ ...p, whatsapp: v }))} required placeholder="Ex: 33612345678" />
+                  <button type="submit" disabled={posting} className="w-full bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-400 hover:to-emerald-600 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg disabled:opacity-50 cursor-pointer">
+                    {posting ? "Publication..." : "Publier mon annonce →"}
+                  </button>
+                  <p className="text-[10px] text-gray-400 text-center">En cliquant, votre annonce sera visible par tous les visiteurs.</p>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* ─── STATS ─── */}
         <section className="py-12 bg-white border-b border-gray-100">
@@ -233,7 +438,7 @@ export default function EchangePage() {
               Prêt à trouver votre nouveau logement ?
             </h2>
             <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-              Rejoignez des milliers de locataires qui ont déjà trouvé leur échange idéal. 
+              Rejoignez des milliers de locataires qui ont déjà trouvé leur échange idéal.
               Ça prend moins de 2 minutes.
             </p>
             <CTAButton className="px-10 py-5 rounded-xl text-lg" />
@@ -290,13 +495,13 @@ export default function EchangePage() {
   );
 }
 
-function FInput({ label, value, onChange, type = "text", required }: {
-  label: string; value: string; onChange: (v: string) => void; type?: string; required?: boolean;
+function FInput({ label, value, onChange, type = "text", required, placeholder }: {
+  label: string; value: string; onChange: (v: string) => void; type?: string; required?: boolean; placeholder?: string;
 }) {
   return (
     <div>
       <label className="block text-xs font-medium text-gray-700 mb-1">{label} {required && <span className="text-red-400">*</span>}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-400 outline-none" />
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} placeholder={placeholder} className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-400 outline-none" />
     </div>
   );
 }
