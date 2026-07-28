@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FaArrowRight, FaMapMarkerAlt } from "react-icons/fa";
+import { FaArrowRight, FaMapMarkerAlt, FaTiktok, FaFacebook } from "react-icons/fa";
 import { useModal } from "@/lib/ModalContext";
 import { ADDRESS, POSTAL_CODE, CITY, COUNTRY, SIRET, SITE_NAME } from "@/lib/constants";
 
@@ -66,8 +66,30 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-400">
-          &copy; {new Date().getFullYear()} {SITE_NAME}. Tous droits réservés.
+        <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-sm text-gray-400">
+            &copy; {new Date().getFullYear()} {SITE_NAME}. Tous droits réservés.
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://www.tiktok.com/@espace_habitat?_r=1&_t=ZS-97tEIgmfz8r"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 bg-gray-100 hover:bg-black text-gray-600 hover:text-white rounded-full flex items-center justify-center transition-all"
+              title="TikTok"
+            >
+              <FaTiktok size={16} />
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61591218195078"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 bg-gray-100 hover:bg-blue-600 text-gray-600 hover:text-white rounded-full flex items-center justify-center transition-all"
+              title="Facebook"
+            >
+              <FaFacebook size={16} />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
