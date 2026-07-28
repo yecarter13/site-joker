@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { HiHome, HiOfficeBuilding, HiDocumentText, HiUserGroup, HiLocationMarker } from "react-icons/hi";
 
 const services = [
@@ -48,17 +49,20 @@ export default function ServicesSection() {
               alt="Accompagnement personnalisé"
               className="w-full h-72 md:h-96 object-cover rounded-2xl shadow-lg"
             />
-            <div className="absolute -bottom-4 -right-4 bg-white rounded-xl p-3 md:p-4 shadow-xl border border-gray-100">
+            <Link
+              href="/analyse"
+              className="absolute -bottom-4 -right-4 bg-white rounded-xl p-3 md:p-4 shadow-xl border border-gray-100 hover:shadow-2xl hover:border-indigo-300 transition-all group cursor-pointer"
+            >
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-200 transition-colors">
                   <HiDocumentText className="text-indigo-600" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-gray-900">Analyse complète</div>
+                  <div className="text-sm font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Analyse complète</div>
                   <div className="text-xs text-gray-500">Rapport 5-8 pages</div>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>

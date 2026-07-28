@@ -26,6 +26,7 @@ export default function Header() {
 
         <nav className="hidden md:flex items-center gap-6">
           <Link href="/catalog" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Logements</Link>
+          <Link href="/analyse" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Analyse</Link>
           <Link href="/#tarifs" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Tarifs</Link>
           <Link href="/#faq" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">FAQ</Link>
           <button
@@ -44,6 +45,7 @@ export default function Header() {
       {open && (
         <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-3">
           <Link href="/catalog" className="block text-sm font-medium text-gray-600 py-2 hover:text-red-600" onClick={() => setOpen(false)}>Logements</Link>
+          <Link href="/analyse" className="block text-sm font-medium text-gray-600 py-2 hover:text-red-600" onClick={() => setOpen(false)}>Analyse</Link>
           <Link href="/#tarifs" className="block text-sm font-medium text-gray-600 py-2 hover:text-red-600" onClick={() => setOpen(false)}>Tarifs</Link>
           <Link href="/#faq" className="block text-sm font-medium text-gray-600 py-2 hover:text-red-600" onClick={() => setOpen(false)}>FAQ</Link>
           <button
