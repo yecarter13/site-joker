@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AdminGuard from "@/components/AdminGuard";
 import { formatPrice } from "@/lib/utils";
-import { HiPlus, HiPencil, HiTrash, HiLogout, HiHome, HiDocumentText, HiSwitchHorizontal, HiCheck } from "react-icons/hi";
+import { HiPlus, HiPencil, HiTrash, HiLogout, HiHome, HiDocumentText, HiSwitchHorizontal, HiCheck, HiMail } from "react-icons/hi";
 
 interface Property {
   id: string;
@@ -120,17 +120,44 @@ function AdminDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6 md:py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <Link href="/admin/properties/new"
+            className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 hover:border-indigo-300 hover:shadow-md transition-all group">
+            <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-200 transition-colors">
+              <HiPlus className="text-indigo-600" size={20} />
+            </div>
+            <div>
+              <div className="font-semibold text-gray-900 text-sm">Ajouter un logement</div>
+              <div className="text-xs text-gray-500">Nouvelle annonce</div>
+            </div>
+          </Link>
+          <Link href="/admin/emails"
+            className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 hover:border-indigo-300 hover:shadow-md transition-all group">
+            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+              <HiMail className="text-green-600" size={20} />
+            </div>
+            <div>
+              <div className="font-semibold text-gray-900 text-sm">Envoyer un email</div>
+              <div className="text-xs text-gray-500">Campagne emailing</div>
+            </div>
+          </Link>
+          <Link href="/catalog" target="_blank"
+            className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 hover:border-indigo-300 hover:shadow-md transition-all group">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+              <HiHome className="text-blue-600" size={20} />
+            </div>
+            <div>
+              <div className="font-semibold text-gray-900 text-sm">Voir le site</div>
+              <div className="text-xs text-gray-500">espace-habitats.fr</div>
+            </div>
+          </Link>
+        </div>
+
         <div className="flex items-center justify-between mb-6 md:mb-8">
           <div>
             <h1 className="text-xl md:text-2xl font-bold text-gray-900">Gestion des logements</h1>
             <p className="text-sm text-gray-500">{properties.length} logement(s)</p>
           </div>
-          <Link
-            href="/admin/properties/new"
-            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 md:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg"
-          >
-            <HiPlus /> <span className="hidden sm:inline">Ajouter un logement</span>
-          </Link>
         </div>
 
         {loading ? (
