@@ -9,6 +9,7 @@ import CommitmentsSection from "@/components/CommitmentsSection";
 import PricingSection from "@/components/PricingSection";
 import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
+import ReservationSection from "@/components/ReservationSection";
 import PartenairesSection from "@/components/PartenairesSection";
 import LouerSection from "@/components/LouerSection";
 import SiegeSection from "@/components/SiegeSection";
@@ -34,6 +35,7 @@ export default function Home() {
         <WaveDivider color="#f9fafb" />
         <FAQSection />
         <FinalCTASection />
+        <ReservationSection />
         <PartenairesSection />
         <LouerSection />
         <SiegeSection />
