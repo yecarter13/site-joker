@@ -1,8 +1,9 @@
 export const SITE_NAME = "Espace Habitat";
-export const SIRET = "78542040700039";
-export const ADDRESS = "12 RUE DE L'EUROPE";
-export const POSTAL_CODE = "08170";
-export const CITY = "FUMAY";
+export const SIREN = "785 420 407";
+export const SIRET = "785 420 407 00013";
+export const ADDRESS = "7 avenue du Maréchal-Leclerc";
+export const POSTAL_CODE = "08000";
+export const CITY = "Charleville-Mézières";
 export const COUNTRY = "FRANCE";
 export const WHATSAPP_NUMBER = "33753045362";
 export const EMAIL = "contact@espace-habitats.fr";

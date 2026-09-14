@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaArrowRight, FaMapMarkerAlt, FaTiktok, FaFacebook } from "react-icons/fa";
 import { useModal } from "@/lib/ModalContext";
-import { ADDRESS, POSTAL_CODE, CITY, COUNTRY, SIRET, SITE_NAME } from "@/lib/constants";
+import { ADDRESS, POSTAL_CODE, CITY, COUNTRY, SIRET, SIREN, SITE_NAME } from "@/lib/constants";
 
 export default function Footer() {
   const { openModal } = useModal();
@@ -55,6 +55,7 @@ export default function Footer() {
                 </span>
               </div>
               <div className="text-xs text-gray-400">
+                SIREN : {SIREN}<br />
                 SIRET : {SIRET}
               </div>
               <button onClick={() => openModal()} className="flex items-center gap-2 hover:text-green-600 transition-colors group cursor-pointer">

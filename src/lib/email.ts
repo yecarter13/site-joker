@@ -30,8 +30,8 @@ function emailTemplate(title: string, body: string): string {
 ${body}
 </td></tr>
 <tr><td style="background:#f9fafb;border-radius:0 0 12px 12px;padding:25px 40px;text-align:center;border-top:1px solid #e5e7eb">
-<p style="color:#6b7280;font-size:12px;margin:0 0 8px">Espace Habitat &bull; 12 RUE DE L'EUROPE &bull; 08170 FUMAY &bull; FRANCE</p>
-<p style="color:#9ca3af;font-size:11px;margin:0">SIRET: 78542040700039</p>
+<p style="color:#6b7280;font-size:12px;margin:0 0 8px">Espace Habitat &bull; 7 avenue du Maréchal-Leclerc &bull; 08000 Charleville-Mézières &bull; FRANCE</p>
+<p style="color:#9ca3af;font-size:11px;margin:0">SIREN: 785 420 407 &bull; SIRET: 785 420 407 00013</p>
 <p style="color:#9ca3af;font-size:11px;margin:8px 0 0">
 <a href="${SITE_URL}" style="color:#dc2626;text-decoration:none">espace-habitats.fr</a>
 </p>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useModal } from "@/lib/ModalContext";
 import { getWhatsAppLink } from "@/lib/utils";
-import { SITE_NAME, ADDRESS, POSTAL_CODE, CITY, COUNTRY, SIRET } from "@/lib/constants";
+import { SITE_NAME, ADDRESS, POSTAL_CODE, CITY, COUNTRY, SIRET, SIREN } from "@/lib/constants";
 import { HiX, HiCheck } from "react-icons/hi";
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -141,7 +141,7 @@ export default function ContactModal() {
               <p className="text-[10px] text-gray-400 text-center">En cliquant, vous acceptez d&apos;etre contacte par nos services.</p>
               <div className="border-t border-gray-100 pt-3 pb-1 text-[10px] text-gray-400 text-center leading-relaxed">
                 {SITE_NAME} · {ADDRESS}, {POSTAL_CODE} {CITY}, {COUNTRY}<br />
-                SIRET : {SIRET}
+                SIREN : {SIREN} · SIRET : {SIRET}
               </div>
             </form>
           </>
